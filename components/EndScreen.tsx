@@ -67,6 +67,20 @@ const EndScreen: React.FC<EndScreenProps> = ({ summary, grade, wrongConcepts, on
   const buttonScale = useRef(new Animated.Value(1)).current;
   const gradeScale = useRef(new Animated.Value(0)).current;
 
+  const summaryConcepts = summary.conceptsToReview.map(c => c.concept);
+  const uniqueWrongConcepts = wrongConcepts.filter(
+    c => !summaryConcepts.includes(c)
+  );
+
+  // Optional: remove duplicates inside wrongConcepts themselves
+  const dedupedWrongConcepts = [...new Set(uniqueWrongConcepts)];
+
+  // Final unified list (summary first)
+  const finalConceptList = [
+    ...summaryConcepts,
+    ...dedupedWrongConcepts
+  ];
+
   useEffect(() => {
     Animated.parallel([
       Animated.timing(fadeAnim, {
@@ -166,26 +180,14 @@ const EndScreen: React.FC<EndScreenProps> = ({ summary, grade, wrongConcepts, on
             You struggled with these concepts. Tap to learn more.
           </Text>
           <View style={styles.conceptsList}>
-            {/* Show concepts from backend summary first */}
-            {summary.conceptsToReview.map((concept, index) => (
+            {finalConceptList.map((conceptName, index) => (
               <WrongConceptCard
-                key={`summary-${concept.concept}-${index}`}
-                conceptName={concept.concept}
+                key={`${conceptName}-${index}`}
+                conceptName={conceptName}
                 index={index}
-                onPress={() => onConceptPress(concept.concept)}
+                onPress={() => onConceptPress(conceptName)}
               />
             ))}
-            {/* Then show wrong concepts that aren't already in summary */}
-            {wrongConcepts
-              .filter(concept => !summary.conceptsToReview.some(c => c.concept === concept))
-              .map((conceptName, index) => (
-                <WrongConceptCard
-                  key={`wrong-${conceptName}-${index}`}
-                  conceptName={conceptName}
-                  index={summary.conceptsToReview.length + index}
-                  onPress={() => onConceptPress(conceptName)}
-                />
-              ))}
           </View>
         </View>
       )}
