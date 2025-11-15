@@ -27,7 +27,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({ currentScreen, onNavigate
             onPress={() => onNavigate(item.id)}
             activeOpacity={0.7}
           >
-            <Icon width={24} height={24} color={isActive ? '#10b981' : '#6b7280'} />
+            <Icon width={24} height={24} color={isActive ? '#022E6B' : '#6b7280'} />
             <Text style={[styles.navLabel, isActive && styles.navLabelActive]}>
               {item.label}
             </Text>
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     gap: 4,
   },
   navItemActive: {
-    backgroundColor: '#ecfdf5',
+    backgroundColor: '#e6f0ff',
     borderRadius: 8,
   },
   navLabel: {
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   navLabelActive: {
-    color: '#10b981',
+    color: '#022E6B',
     fontWeight: '600',
   },
 });

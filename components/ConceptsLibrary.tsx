@@ -1,6 +1,18 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated, Modal } from 'react-native';
 import { BookOpenIcon } from './icons/BookOpenIcon';
+import { PiggyBankIcon } from './icons/PiggyBankIcon';
+import { TrophyIcon } from './icons/TrophyIcon';
+import { CreditCardIcon } from './icons/CreditCardIcon';
+import { WalletIcon } from './icons/WalletIcon';
+import { ShieldIcon } from './icons/ShieldIcon';
+import { DocumentIcon } from './icons/DocumentIcon';
+import { HeartIcon } from './icons/HeartIcon';
+import { ScaleIcon } from './icons/ScaleIcon';
+import { ChartIcon } from './icons/ChartIcon';
+import { CalendarIcon } from './icons/CalendarIcon';
+import { PercentIcon } from './icons/PercentIcon';
+import { BankIcon } from './icons/BankIcon';
 
 interface Concept {
   id: string;
@@ -225,6 +237,46 @@ interface ConceptsLibraryProps {
   onConceptSelected?: () => void;
 }
 
+// Function to get the appropriate icon for each concept
+const getConceptIcon = (conceptId: string) => {
+  const iconProps = { width: 32, height: 32, color: "#06b6d4" };
+  
+  switch (conceptId) {
+    case 'saving':
+      return <PiggyBankIcon {...iconProps} />;
+    case 'investing':
+      return <ChartIcon {...iconProps} />;
+    case 'credit':
+      return <CreditCardIcon {...iconProps} />;
+    case 'debt':
+      return <WalletIcon {...iconProps} />;
+    case 'insurance':
+      return <ShieldIcon {...iconProps} />;
+    case 'taxes':
+      return <DocumentIcon {...iconProps} />;
+    case 'charity':
+      return <HeartIcon {...iconProps} />;
+    case 'opportunity-cost':
+      return <ScaleIcon {...iconProps} />;
+    case 'scarcity':
+      return <ChartIcon {...iconProps} />;
+    case 'budgeting':
+      return <WalletIcon {...iconProps} />;
+    case 'banks-account':
+      return <BankIcon {...iconProps} />;
+    case 'interest':
+      return <PercentIcon {...iconProps} />;
+    case 'short-long-term':
+      return <CalendarIcon {...iconProps} />;
+    case 'stocks-bonds-funds':
+      return <TrophyIcon {...iconProps} />;
+    case 'risks-diversification':
+      return <ChartIcon {...iconProps} />;
+    default:
+      return <BookOpenIcon {...iconProps} />;
+  }
+};
+
 const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, selectedConceptId, onConceptSelected }) => {
   const [selectedConcept, setSelectedConcept] = useState<Concept | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -309,7 +361,7 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, selectedConce
                 style={styles.conceptCardTouchable}
               >
                 <View style={styles.conceptHeader}>
-                  <BookOpenIcon width={32} height={32} color={"#06b6d4"} />
+                  {getConceptIcon(concept.id)}
                   <View style={styles.conceptHeaderText}>
                     <Text style={styles.conceptName}>{concept.name}</Text>
                   </View>
@@ -322,18 +374,6 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, selectedConce
           );
         })}
       </ScrollView>
-
-      <View style={styles.footer}>
-        {onBack && (
-          <TouchableOpacity
-            style={styles.backButton}
-            onPress={onBack}
-            activeOpacity={0.8}
-          >
-            <Text style={styles.backButtonText}>← Back to Home</Text>
-          </TouchableOpacity>
-        )}
-      </View>
 
       <Modal
         visible={modalVisible}
@@ -411,7 +451,7 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, selectedConce
                       {showQuizResult && (
                         <View style={styles.quizExplanationContainer}>
                           <Text style={styles.quizExplanationTitle}>
-                            {selectedQuizAnswer === selectedConcept.correctAnswerIndex ? '✓ Correct!' : '✗ Not quite'}
+                            {selectedQuizAnswer === selectedConcept.correctAnswerIndex ? '🎉 Correct!' : '💭 Not quite'}
                           </Text>
                           <Text style={styles.quizExplanationText}>
                             {selectedConcept.quizExplanation}
@@ -436,7 +476,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
   },
   header: {
-    backgroundColor: '#10b981',
+    backgroundColor: '#022E6B',
     padding: 24,
     paddingTop: 40,
   },
@@ -490,7 +530,7 @@ const styles = StyleSheet.create({
   },
   conceptCardStudied: {
     borderWidth: 2,
-    borderColor: '#10b981',
+    borderColor: '#022E6B',
   },
   conceptCardTouchable: {
     padding: 16,
@@ -511,7 +551,7 @@ const styles = StyleSheet.create({
   },
   studiedBadge: {
     fontSize: 12,
-    color: '#10b981',
+    color: '#022E6B',
     fontWeight: '600',
     marginTop: 4,
   },
@@ -520,35 +560,8 @@ const styles = StyleSheet.create({
     color: '#4b5563',
     lineHeight: 20,
   },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: '#ffffff',
-    padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#e5e7eb',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-    gap: 8,
-  },
-  backButton: {
-    backgroundColor: '#f3f4f6',
-    paddingVertical: 12,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  backButtonText: {
-    color: '#4b5563',
-    fontSize: 16,
-    fontWeight: '600',
-  },
   startButton: {
-    backgroundColor: '#10b981',
+    backgroundColor: '#022E6B',
     paddingVertical: 16,
     borderRadius: 12,
     alignItems: 'center',
@@ -618,7 +631,7 @@ const styles = StyleSheet.create({
   },
   bullet: {
     fontSize: 16,
-    color: '#10b981',
+    color: '#022E6B',
     fontWeight: 'bold',
   },
   keyPointText: {
@@ -639,7 +652,7 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   quizButton: {
-    backgroundColor: '#10b981',
+    backgroundColor: '#022E6B',
     paddingVertical: 14,
     paddingHorizontal: 24,
     borderRadius: 12,
@@ -676,8 +689,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   quizOptionCorrect: {
-    backgroundColor: '#d1fae5',
-    borderColor: '#10b981',
+    backgroundColor: '#e6f0ff',
+    borderColor: '#022E6B',
   },
   quizOptionWrong: {
     backgroundColor: '#fee2e2',
@@ -688,7 +701,7 @@ const styles = StyleSheet.create({
     color: '#111827',
   },
   quizOptionTextCorrect: {
-    color: '#065f46',
+    color: '#022E6B',
     fontWeight: '600',
   },
   quizOptionTextWrong: {

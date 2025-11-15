@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Animated, TextInput } from 'react-native';
-import { PiggyBankIcon } from './icons/PiggyBankIcon';
+import { View, Text, TouchableOpacity, StyleSheet, Animated, TextInput, ScrollView, Image, Dimensions } from 'react-native';
+
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
 
 type LiteracyLevel = 'beginner' | 'medium' | 'advanced';
 
@@ -84,20 +85,33 @@ const InitialQuiz: React.FC<InitialQuizProps> = ({ onSubmit }) => {
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[
-          styles.content,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideAnim }],
-          },
-        ]}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled"
       >
-        <PiggyBankIcon width={80} height={80} color="#10b981" />
-        <Text style={styles.title}>Let's Get Started!</Text>
-        <Text style={styles.subtitle}>
-          Help us personalize your financial journey
-        </Text>
+        <Animated.View
+          style={[
+            styles.content,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }],
+            },
+          ]}
+        >
+          {/* Finly Logo */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../assets/logo.png')}
+              style={styles.logoImage}
+              resizeMode="contain"
+            />
+          </View>
+
+          <Text style={styles.title}>Let's Get Started!</Text>
+          <Text style={styles.subtitle}>
+            Help us personalize your financial journey
+          </Text>
 
         <View style={styles.formSection}>
           <Text style={styles.label}>What's your age?</Text>
@@ -172,7 +186,8 @@ const InitialQuiz: React.FC<InitialQuizProps> = ({ onSubmit }) => {
             <Text style={styles.submitButtonText}>Continue</Text>
           </TouchableOpacity>
         </Animated.View>
-      </Animated.View>
+        </Animated.View>
+      </ScrollView>
     </View>
   );
 };
@@ -182,56 +197,70 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f9fafb',
   },
+  scrollContent: {
+    flexGrow: 1,
+    paddingBottom: 20,
+  },
   content: {
-    flex: 1,
-    padding: 24,
-    paddingTop: 60,
+    padding: SCREEN_WIDTH < 375 ? 16 : 20,
+    paddingTop: SCREEN_WIDTH < 375 ? 20 : 30,
     alignItems: 'center',
   },
+  logoContainer: {
+    alignItems: 'center',
+    marginBottom: SCREEN_WIDTH < 375 ? 12 : 16,
+  },
+  logoImage: {
+    width: SCREEN_WIDTH < 375 ? 80 : 100,
+    height: SCREEN_WIDTH < 375 ? 80 : 100,
+  },
   title: {
-    fontSize: 32,
+    fontSize: SCREEN_WIDTH < 375 ? 22 : 28,
     fontWeight: 'bold',
     color: '#111827',
-    marginTop: 24,
-    marginBottom: 8,
+    marginTop: SCREEN_WIDTH < 375 ? 8 : 12,
+    marginBottom: 4,
     textAlign: 'center',
   },
   subtitle: {
-    fontSize: 16,
+    fontSize: SCREEN_WIDTH < 375 ? 13 : 15,
     color: '#6b7280',
     textAlign: 'center',
-    marginBottom: 32,
+    marginBottom: SCREEN_WIDTH < 375 ? 16 : 20,
+    paddingHorizontal: SCREEN_WIDTH < 375 ? 12 : 0,
+    lineHeight: SCREEN_WIDTH < 375 ? 18 : 20,
   },
   formSection: {
     width: '100%',
-    maxWidth: 400,
-    marginBottom: 24,
+    maxWidth: SCREEN_WIDTH < 375 ? SCREEN_WIDTH - 32 : 400,
+    marginBottom: SCREEN_WIDTH < 375 ? 16 : 20,
   },
   label: {
-    fontSize: 18,
+    fontSize: SCREEN_WIDTH < 375 ? 15 : 17,
     fontWeight: '600',
     color: '#111827',
-    marginBottom: 12,
+    marginBottom: SCREEN_WIDTH < 375 ? 8 : 10,
   },
   input: {
     backgroundColor: '#ffffff',
     borderWidth: 2,
     borderColor: '#e5e7eb',
     borderRadius: 12,
-    padding: 16,
-    fontSize: 18,
+    padding: SCREEN_WIDTH < 375 ? 12 : 14,
+    fontSize: SCREEN_WIDTH < 375 ? 16 : 18,
     color: '#111827',
     textAlign: 'center',
+    minHeight: 44,
   },
   optionsContainer: {
-    gap: 12,
+    gap: SCREEN_WIDTH < 375 ? 8 : 10,
   },
   optionCard: {
     backgroundColor: '#ffffff',
     borderWidth: 2,
     borderColor: '#e5e7eb',
     borderRadius: 12,
-    padding: 16,
+    padding: SCREEN_WIDTH < 375 ? 12 : 14,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -239,57 +268,63 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   optionCardSelected: {
-    borderColor: '#10b981',
-    backgroundColor: '#ecfdf5',
+    borderColor: '#022E6B',
+    backgroundColor: '#e6f0ff',
     borderWidth: 3,
   },
   optionLabel: {
-    fontSize: 18,
+    fontSize: SCREEN_WIDTH < 375 ? 16 : 17,
     fontWeight: 'bold',
     color: '#111827',
-    marginBottom: 4,
+    marginBottom: 2,
   },
   optionLabelSelected: {
-    color: '#10b981',
+    color: '#022E6B',
   },
   optionDescription: {
-    fontSize: 14,
+    fontSize: SCREEN_WIDTH < 375 ? 13 : 14,
     color: '#6b7280',
-    lineHeight: 20,
+    lineHeight: SCREEN_WIDTH < 375 ? 18 : 20,
   },
   optionDescriptionSelected: {
-    color: '#059669',
+    color: '#022E6B',
   },
   errorContainer: {
     backgroundColor: '#fee2e2',
     borderWidth: 1,
     borderColor: '#f87171',
     borderRadius: 8,
-    padding: 12,
-    marginBottom: 16,
+    padding: SCREEN_WIDTH < 375 ? 10 : 12,
+    marginBottom: SCREEN_WIDTH < 375 ? 12 : 16,
     width: '100%',
-    maxWidth: 400,
+    maxWidth: SCREEN_WIDTH < 375 ? SCREEN_WIDTH - 32 : 400,
   },
   errorText: {
     color: '#991b1b',
-    fontSize: 14,
+    fontSize: SCREEN_WIDTH < 375 ? 13 : 14,
     textAlign: 'center',
   },
   submitButton: {
-    backgroundColor: '#10b981',
-    paddingHorizontal: 48,
-    paddingVertical: 16,
+    backgroundColor: '#022E6B',
+    paddingHorizontal: SCREEN_WIDTH < 375 ? 32 : 40,
+    paddingVertical: SCREEN_WIDTH < 375 ? 12 : 14,
     borderRadius: 50,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
     elevation: 8,
-    marginTop: 8,
+    marginTop: SCREEN_WIDTH < 375 ? 4 : 8,
+    marginBottom: SCREEN_WIDTH < 375 ? 16 : 20,
+    minHeight: 44,
+    width: '100%',
+    maxWidth: SCREEN_WIDTH < 375 ? SCREEN_WIDTH - 32 : 400,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   submitButtonText: {
     color: '#ffffff',
-    fontSize: 20,
+    fontSize: SCREEN_WIDTH < 375 ? 18 : 20,
     fontWeight: 'bold',
   },
 });

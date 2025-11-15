@@ -32,7 +32,7 @@ const LoadingSpinner: React.FC = () => {
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
       <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-        <ActivityIndicator size="large" color="#10b981" />
+        <ActivityIndicator size="large" color="#022E6B" />
       </Animated.View>
       <Animated.Text style={[styles.text, { opacity: pulseAnim }]}>
         Building your story...

@@ -161,7 +161,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
           </View>
           )}
           <View style={styles.statItem}>
-            <WalletIcon width={32} height={32} color="#10b981" />
+            <WalletIcon width={32} height={32} color="#022E6B" />
             <View style={styles.statTextContainer}>
               <Text style={styles.statLabel}>Net Worth</Text>
               <Text style={styles.statValue}>${playerStats.netWorth.toLocaleString()}</Text>
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 12,
   },
-  goodText: { color: "#10b981" },
+  goodText: { color: "#022E6B" },
   neutralText: { color: "#fbbf24" },
   badText: { color: "#ef4444" },
   feedbackBody: {
@@ -314,7 +314,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   moneyDeltaPositive: {
-    color: "#10b981",
+    color: "#022E6B",
   },
   moneyDeltaNegative: {
     color: "#ef4444",
@@ -439,7 +439,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
   submitButton: {
-    backgroundColor: "#10b981",
+    backgroundColor: "#022E6B",
     paddingVertical: 12,
     paddingHorizontal: 32,
     borderRadius: 50,

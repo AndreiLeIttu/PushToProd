@@ -91,7 +91,7 @@ const EndScreen: React.FC<EndScreenProps> = ({ summary, grade, wrongConcepts, on
 
   const getGradeColor = (letterGrade: string) => {
     switch (letterGrade) {
-      case 'A': return '#10b981';
+      case 'A': return '#022E6B';
       case 'B': return '#3b82f6';
       case 'C': return '#f59e0b';
       case 'D': return '#ef4444';
@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     padding: 24,
-    backgroundColor: '#10b981',
+    backgroundColor: '#022E6B',
     borderRadius: 16,
     marginBottom: 24,
     shadowColor: '#000',
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   playAgainButton: {
-    backgroundColor: '#10b981',
+    backgroundColor: '#022E6B',
     paddingVertical: 16,
     paddingHorizontal: 32,
     borderRadius: 50,
