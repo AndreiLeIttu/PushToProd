@@ -88,7 +88,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartSimulation, onStudyCon
           },
         ]}
       >
-        <Text style={styles.title}>Welcome to FinQuest!</Text>
+        <Text style={styles.title}>Welcome to Finly!</Text>
         <Text style={styles.description}>
           Navigate life's financial journey, make smart choices, and master the world of money in this interactive simulation.
         </Text>

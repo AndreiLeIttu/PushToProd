@@ -13,14 +13,20 @@ interface GameScreenProps {
 const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswerSubmit }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  
+
+  const [showHint, setShowHint] = useState(false);
+  const hintOpacity = useRef(new Animated.Value(0)).current;
+
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(30)).current;
 
   useEffect(() => {
+    setShowHint(false);
+    hintOpacity.setValue(0);
+
     fadeAnim.setValue(0);
     slideAnim.setValue(30);
-    
+
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -34,6 +40,15 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
       }),
     ]).start();
   }, [scenario]);
+
+  const revealHint = () => {
+    setShowHint(true);
+    Animated.timing(hintOpacity, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  };
 
   const handleSubmit = () => {
     if (!selectedOption) return;
@@ -57,13 +72,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
         useNativeDriver: true,
       }),
     ]).start();
-    
+
     setSelectedOption(optionText);
   };
 
   return (
-    <ScrollView 
-      style={styles.container} 
+    <ScrollView
+      style={styles.container}
       contentContainerStyle={styles.contentContainer}
       showsVerticalScrollIndicator={false}
     >
@@ -91,7 +106,6 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
           </View>
         </View>
       </Animated.View>
-
       <Animated.View
         style={[
           styles.scenarioContainer,
@@ -102,8 +116,20 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
         ]}
       >
         <Text style={styles.scenarioText}>{scenario.scenario}</Text>
-        <Text style={styles.question}>{scenario.question}</Text>
-        
+
+        <View style={styles.questionRow}>
+          <Text style={styles.question}>{scenario.question}</Text>
+        </View>
+        {!showHint && (
+          <TouchableOpacity style={styles.hintButton} onPress={revealHint}>
+            <Text style={styles.hintButtonText}>Show Hint</Text>
+          </TouchableOpacity>
+        )}
+        {showHint && (
+          <Animated.View style={{ opacity: hintOpacity }}>
+            <Text style={styles.hintText}>{scenario.hint}</Text>
+          </Animated.View>
+        )}
         <View style={styles.optionsContainer}>
           {scenario.options.map((option, index) => {
             const isSelected = selectedOption === option.text;
@@ -122,7 +148,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
                   onPress={() => handleOptionPress(index, option.text)}
                   style={[
                     styles.optionButton,
-                    isSelected && styles.optionButtonSelected
+                    isSelected && styles.optionButtonSelected,
                   ]}
                   activeOpacity={0.7}
                 >
@@ -149,11 +175,13 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
             );
           })}
         </View>
-
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={!selectedOption || isLoading}
-          style={[styles.submitButton, (!selectedOption || isLoading) && styles.submitButtonDisabled]}
+          style={[
+            styles.submitButton,
+            (!selectedOption || isLoading) && styles.submitButtonDisabled,
+          ]}
           activeOpacity={0.8}
         >
           <Text style={styles.submitButtonText}>
@@ -240,11 +268,36 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     lineHeight: 24,
   },
+  questionRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
   question: {
     fontSize: 20,
     fontWeight: '600',
-    marginBottom: 20,
+    marginBottom: 10,
     color: '#111827',
+  },
+  hintButton: {
+    alignSelf: 'flex-start',
+    backgroundColor: '#e0f2fe',
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  hintButtonText: {
+    color: '#0284c7',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  hintText: {
+    backgroundColor: '#f0f9ff',
+    padding: 12,
+    borderRadius: 8,
+    color: '#0369a1',
+    marginBottom: 20,
+    fontSize: 15,
   },
   optionsContainer: {
     gap: 12,

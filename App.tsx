@@ -40,7 +40,6 @@ const App: React.FC = () => {
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Fade in animation when game state changes
     fadeAnim.setValue(0);
     Animated.timing(fadeAnim, {
       toValue: 1,
@@ -50,9 +49,6 @@ const App: React.FC = () => {
   }, [gameState]);
 
   const calculateGrade = (good: number, neutral: number, bad: number, total: number): GameGrade => {
-    // Grade based on avoiding bad answers
-    // Good answers = full points, neutral = partial points, bad = no points
-    // Score = (good * 1.0 + neutral * 0.5) / total
     const score = total > 0 ? (good * 1.0 + neutral * 0.5) / total : 0;
     const percentage = score * 100;
     
@@ -79,7 +75,6 @@ const App: React.FC = () => {
     setError(null);
     
     try {
-      // Initialize profile with backend
       await initializeProfile(age, level);
       setUserAge(age);
       setLiteracyLevel(level);
@@ -107,17 +102,14 @@ const App: React.FC = () => {
     setTotalQuestions(0);
     setWrongConcepts([]);
     
-    // Always use all default concepts for simulation
     const initialUnmastered = ['Budgeting', 'Saving', 'Investing', 'Credit', 'Debt', 'Retirement Planning', 'Insurance', 'Taxes'];
     
     setUnmasteredConcepts(initialUnmastered);
     setMasteredConcepts([]);
     
     try {
-      // Start life in backend
       const lifeState = await startLife();
       
-      // Get initial scenario
       const initialScenario = await fetchInitialScenario();
       setScenario(initialScenario);
       setPlayerStats({ age: lifeState.game_age, netWorth: lifeState.balance });
@@ -147,7 +139,6 @@ const App: React.FC = () => {
         studiedConcepts,
       });
 
-      // Track answer quality and total questions
       setTotalQuestions(prev => prev + 1);
       if (analysis.quality === 'good') {
         setGoodAnswers(prev => prev + 1);
@@ -157,35 +148,30 @@ const App: React.FC = () => {
         setBadAnswers(prev => prev + 1);
       }
 
-      // Update concepts based on the analysis (only mark as mastered if good, mark as unmastered if bad)
       if (scenario?.financialConcept) {
         if (analysis.quality === 'good') {
           if (!masteredConcepts.includes(scenario.financialConcept)) {
             setMasteredConcepts(prev => [...prev, scenario.financialConcept]);
             setUnmasteredConcepts(prev => prev.filter(c => c !== scenario.financialConcept));
           }
-          // Remove from wrong concepts if it was there
           setWrongConcepts(prev => prev.filter(c => c !== scenario.financialConcept));
         } else if (analysis.quality === 'bad') {
            if (!unmasteredConcepts.includes(scenario.financialConcept)) {
             setUnmasteredConcepts(prev => [...prev, scenario.financialConcept]);
           }
-          // Add to wrong concepts if not already there
           if (!wrongConcepts.includes(scenario.financialConcept)) {
             setWrongConcepts(prev => [...prev, scenario.financialConcept]);
           }
         }
       }
 
-      // Update player stats with backend data
       const newAge = updatedLifeState.game_age;
       const newNetWorth = updatedLifeState.balance;
 
-      if (newAge >= 68) { // End game condition
+      if (newAge >= 68) {
         try {
           const backendSummary = await fetchGameSummary();
           const summary = convertSummaryToFrontend(backendSummary);
-          // Calculate grade with current answer included
           const finalGood = goodAnswers + (analysis.quality === 'good' ? 1 : 0);
           const finalNeutral = neutralAnswers + (analysis.quality === 'neutral' ? 1 : 0);
           const finalBad = badAnswers + (analysis.quality === 'bad' ? 1 : 0);
@@ -247,7 +233,6 @@ const App: React.FC = () => {
             grade={gameGrade}
             wrongConcepts={wrongConcepts}
             onConceptPress={(conceptName) => {
-              // Map concept name to concept ID
               const conceptMap: Record<string, string> = {
                 'Budgeting': 'budgeting',
                 'Saving': 'saving',
@@ -258,12 +243,9 @@ const App: React.FC = () => {
                 'Insurance': 'insurance',
                 'Taxes': 'taxes',
               };
-              // Handle both display names and IDs
-              // Normalize concept name (handle variations)
               const normalizedName = conceptName.trim();
               let conceptId = conceptMap[normalizedName];
               
-              // If not found, try lowercase matching
               if (!conceptId) {
                 const lowerName = normalizedName.toLowerCase();
                 for (const [key, value] of Object.entries(conceptMap)) {
@@ -274,7 +256,6 @@ const App: React.FC = () => {
                 }
               }
               
-              // Fallback: convert to ID format
               if (!conceptId) {
                 conceptId = normalizedName.toLowerCase().replace(/\s+/g, '-');
               }
@@ -308,7 +289,7 @@ const App: React.FC = () => {
   const showNavBar = gameState === 'start' || gameState === 'concepts' || gameState === 'playing';
   const getCurrentScreen = () => {
     if (gameState === 'concepts') return 'concepts';
-    if (gameState === 'playing') return 'start'; // Show as "Home" during game
+    if (gameState === 'playing') return 'start';
     if (gameState === 'start') return 'start';
     return 'start';
   };
@@ -326,9 +307,7 @@ const App: React.FC = () => {
             if (screen === 'concepts') {
               setGameState('concepts');
             } else if (screen === 'start') {
-              // If playing, go back to start screen (this will pause/exit the game)
               if (gameState === 'playing') {
-                // Optionally show a confirmation or just go back
                 setGameState('start');
               } else {
                 setGameState('start');

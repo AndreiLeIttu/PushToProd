@@ -45,7 +45,7 @@ interface BackendOption {
 interface BackendFinancialEvent {
   event_id: string;
   event_content: string;
-  hint?: string;
+  hint: string; 
   options: BackendOption[];
 }
 
@@ -111,7 +111,6 @@ export const fetchNextQuestion = async (): Promise<BackendFinancialEvent> => {
 };
 
 export const submitAnswer = async (
-  optionId: string,
   consequence: BackendOption['consequence']
 ): Promise<BackendLifeState> => {
   const response = await fetch(`${API_BASE_URL}/answer_question`, {
@@ -160,19 +159,17 @@ export const getProfile = async () => {
 };
 
 export const convertEventToScenario = (event: BackendFinancialEvent): Scenario => {
-  const financialConcept = 'Financial Decision';
-
-  const question = event.hint || event.event_content;
-
+  const financialConcept = "Financial Decision";
   return {
     scenario: event.event_content,
-    question: question,
+    question: event.event_content,
     options: event.options.map(opt => ({
       text: opt.content,
       outcome: opt.consequence.description || `You chose: ${opt.content}`,
       moneyDelta: opt.consequence.money_delta
     })),
     financialConcept,
+    hint: event.hint,
   };
 };
 
@@ -214,8 +211,8 @@ export const fetchNextScenario = async (
     throw new Error('Selected option not found');
   }
 
-  const lifeState = await submitAnswer(selectedOption.id, selectedOption.consequence);
-
+  const lifeState = await submitAnswer(selectedOption.consequence);
+  
   const quality = determineAnswerQuality(selectedOption.consequence);
 
   currentEvent = await fetchNextQuestion();

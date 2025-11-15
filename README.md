@@ -2,7 +2,7 @@
 <img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
 </div>
 
-# FinQuest: A Life Simulation Game
+# Finly: A Life Simulation Game
 
 A React Native mobile app that teaches financial literacy through an interactive life simulation game.
 
