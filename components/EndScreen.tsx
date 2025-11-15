@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
-import { ConceptToReview } from '../types';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated } from 'react-native';
+import { ConceptToReview, GameGrade } from '../types';
 import { TrophyIcon } from './icons/TrophyIcon';
 import { BookOpenIcon } from './icons/BookOpenIcon';
 
@@ -9,89 +9,190 @@ interface EndScreenProps {
     overallSummary: string;
     conceptsToReview: ConceptToReview[];
   };
+  grade: GameGrade;
+  wrongConcepts: string[];
+  onConceptPress: (conceptName: string) => void;
   onPlayAgain: () => void;
 }
 
-const ConceptReviewCard: React.FC<{ concept: ConceptToReview }> = ({ concept }) => {
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
-  const [showResult, setShowResult] = useState(false);
+const WrongConceptCard: React.FC<{ conceptName: string; index: number; onPress: () => void }> = ({ conceptName, index, onPress }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
 
-  const handleAnswerSelect = (index: number) => {
-    if (showResult) return;
-    setSelectedAnswer(index);
-    setShowResult(true);
-  };
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        delay: index * 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 400,
+        delay: index * 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
 
   return (
-    <View style={styles.conceptCard}>
-      <View style={styles.conceptHeader}>
-        <BookOpenIcon width={24} height={24} color="#06b6d4" />
-        <Text style={styles.conceptTitle}>{concept.concept}</Text>
-      </View>
-      <Text style={styles.conceptDescription}>{concept.description}</Text>
-      <Text style={styles.conceptQuestion}>{concept.question}</Text>
-      
-      <View style={styles.optionsContainer}>
-        {concept.options.map((option, index) => {
-          const isCorrect = index === concept.correctAnswerIndex;
-          const isWrong = index === selectedAnswer && !isCorrect;
-          
-          return (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleAnswerSelect(index)}
-              disabled={showResult}
-              style={[
-                styles.optionButton,
-                showResult && isCorrect && styles.optionButtonCorrect,
-                showResult && isWrong && styles.optionButtonWrong,
-              ]}
-            >
-              <Text style={[
-                styles.optionText,
-                showResult && isCorrect && styles.optionTextCorrect,
-                showResult && isWrong && styles.optionTextWrong,
-              ]}>
-                {option}
-              </Text>
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-      
-      {showResult && (
-        <View style={styles.explanationContainer}>
-          <Text style={styles.explanationTitle}>Explanation:</Text>
-          <Text style={styles.explanationText}>{concept.explanation}</Text>
+    <Animated.View
+      style={[
+        {
+          opacity: fadeAnim,
+          transform: [{ translateY: slideAnim }],
+        },
+      ]}
+    >
+      <TouchableOpacity
+        style={styles.wrongConceptCard}
+        onPress={onPress}
+        activeOpacity={0.7}
+      >
+        <BookOpenIcon width={24} height={24} color="#ef4444" />
+        <View style={styles.wrongConceptTextContainer}>
+          <Text style={styles.wrongConceptName}>{conceptName}</Text>
+          <Text style={styles.wrongConceptHint}>Tap to review this concept</Text>
         </View>
-      )}
-    </View>
+        <Text style={styles.arrow}>→</Text>
+      </TouchableOpacity>
+    </Animated.View>
   );
 };
 
-const EndScreen: React.FC<EndScreenProps> = ({ summary, onPlayAgain }) => {
+const EndScreen: React.FC<EndScreenProps> = ({ summary, grade, wrongConcepts, onConceptPress, onPlayAgain }) => {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(50)).current;
+  const buttonScale = useRef(new Animated.Value(1)).current;
+  const gradeScale = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }),
+      Animated.spring(gradeScale, {
+        toValue: 1,
+        tension: 50,
+        friction: 7,
+        delay: 300,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
+  const getGradeColor = (letterGrade: string) => {
+    switch (letterGrade) {
+      case 'A': return '#10b981';
+      case 'B': return '#3b82f6';
+      case 'C': return '#f59e0b';
+      case 'D': return '#ef4444';
+      case 'F': return '#dc2626';
+      default: return '#6b7280';
+    }
+  };
+
+  const handlePressIn = () => {
+    Animated.spring(buttonScale, {
+      toValue: 0.95,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const handlePressOut = () => {
+    Animated.spring(buttonScale, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  };
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.header}>
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.contentContainer}
+      showsVerticalScrollIndicator={false}
+    >
+      <Animated.View
+        style={[
+          styles.header,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          },
+        ]}
+      >
         <TrophyIcon width={64} height={64} color="#ffffff" />
         <Text style={styles.headerTitle}>Your Financial Journey Summary</Text>
+        
+        <Animated.View
+          style={[
+            styles.gradeContainer,
+            {
+              transform: [{ scale: gradeScale }],
+            },
+          ]}
+        >
+          <View style={[styles.gradeCircle, { backgroundColor: getGradeColor(grade.letterGrade) }]}>
+            <Text style={styles.gradeLetter}>{grade.letterGrade}</Text>
+          </View>
+          <View style={styles.gradeDetails}>
+            <Text style={styles.gradePercentage}>{grade.percentage}%</Text>
+            <Text style={styles.gradeSubtext}>Final Score</Text>
+            {grade.goodAnswers > 0 && (
+              <View style={styles.goodAnswersBadge}>
+                <Text style={styles.goodAnswersText}>
+                  ✓ {grade.goodAnswers} excellent choice{grade.goodAnswers !== 1 ? 's' : ''}
+                </Text>
+              </View>
+            )}
+          </View>
+        </Animated.View>
+        
         <Text style={styles.headerSummary}>{summary.overallSummary}</Text>
-      </View>
+      </Animated.View>
 
-      {summary.conceptsToReview.length > 0 && (
+      {wrongConcepts.length > 0 && (
         <View style={styles.conceptsSection}>
-          <Text style={styles.sectionTitle}>Areas to Strengthen</Text>
+          <Text style={styles.sectionTitle}>Concepts to Review</Text>
+          <Text style={styles.sectionSubtitle}>
+            You struggled with these concepts. Tap to learn more.
+          </Text>
           <View style={styles.conceptsList}>
-            {summary.conceptsToReview.map(concept => (
-              <ConceptReviewCard key={concept.concept} concept={concept} />
+            {wrongConcepts.map((conceptName, index) => (
+              <WrongConceptCard
+                key={conceptName}
+                conceptName={conceptName}
+                index={index}
+                onPress={() => onConceptPress(conceptName)}
+              />
             ))}
           </View>
         </View>
       )}
 
-      <TouchableOpacity style={styles.playAgainButton} onPress={onPlayAgain}>
-        <Text style={styles.playAgainButtonText}>Play Again</Text>
-      </TouchableOpacity>
+      <Animated.View
+        style={{
+          transform: [{ scale: buttonScale }],
+        }}
+      >
+        <TouchableOpacity
+          style={styles.playAgainButton}
+          onPress={onPlayAgain}
+          onPressIn={handlePressIn}
+          onPressOut={handlePressOut}
+          activeOpacity={0.9}
+        >
+          <Text style={styles.playAgainButtonText}>Play Again</Text>
+        </TouchableOpacity>
+      </Animated.View>
     </ScrollView>
   );
 };
@@ -103,6 +204,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 24,
+    paddingBottom: 40,
   },
   header: {
     alignItems: 'center',
@@ -129,6 +231,65 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     textAlign: 'center',
     lineHeight: 24,
+    marginTop: 16,
+  },
+  gradeContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 24,
+    marginBottom: 12,
+    gap: 20,
+  },
+  gradeCircle: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 10,
+    borderWidth: 4,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  gradeLetter: {
+    fontSize: 48,
+    fontWeight: 'bold',
+    color: '#ffffff',
+  },
+  gradeDetails: {
+    alignItems: 'flex-start',
+    flex: 1,
+  },
+  gradePercentage: {
+    fontSize: 42,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    letterSpacing: -1,
+  },
+  gradeSubtext: {
+    fontSize: 16,
+    color: '#ffffff',
+    opacity: 0.9,
+    marginTop: 4,
+    fontWeight: '500',
+  },
+  goodAnswersBadge: {
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginTop: 12,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  goodAnswersText: {
+    fontSize: 14,
+    color: '#ffffff',
+    fontWeight: '600',
   },
   conceptsSection: {
     marginBottom: 24,
@@ -141,91 +302,45 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   conceptsList: {
-    gap: 16,
+    gap: 12,
   },
-  conceptCard: {
+  wrongConceptCard: {
     backgroundColor: '#ffffff',
-    padding: 20,
+    padding: 16,
     borderRadius: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
-  },
-  conceptHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-    marginBottom: 12,
-  },
-  conceptTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#0891b2',
-  },
-  conceptDescription: {
-    fontSize: 16,
-    color: '#4b5563',
-    marginBottom: 16,
-    lineHeight: 22,
-  },
-  conceptQuestion: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 12,
-  },
-  optionsContainer: {
-    gap: 8,
-    marginBottom: 16,
-  },
-  optionButton: {
-    width: '100%',
-    padding: 12,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#e5e7eb',
-    backgroundColor: '#f3f4f6',
-  },
-  optionButtonCorrect: {
-    backgroundColor: '#d1fae5',
-    borderColor: '#10b981',
-  },
-  optionButtonWrong: {
-    backgroundColor: '#fee2e2',
-    borderColor: '#ef4444',
-  },
-  optionText: {
-    fontSize: 16,
-    color: '#111827',
-    textAlign: 'left',
-  },
-  optionTextCorrect: {
-    color: '#065f46',
-    fontWeight: '600',
-  },
-  optionTextWrong: {
-    color: '#991b1b',
-    fontWeight: '600',
-  },
-  explanationContainer: {
-    backgroundColor: '#dbeafe',
     borderLeftWidth: 4,
-    borderLeftColor: '#3b82f6',
-    padding: 16,
-    borderRadius: 4,
+    borderLeftColor: '#ef4444',
   },
-  explanationTitle: {
-    fontSize: 16,
+  wrongConceptTextContainer: {
+    flex: 1,
+  },
+  wrongConceptName: {
+    fontSize: 18,
     fontWeight: 'bold',
-    color: '#1e40af',
-    marginBottom: 8,
+    color: '#111827',
+    marginBottom: 4,
   },
-  explanationText: {
+  wrongConceptHint: {
     fontSize: 14,
-    color: '#1e40af',
-    lineHeight: 20,
+    color: '#6b7280',
+  },
+  arrow: {
+    fontSize: 20,
+    color: '#6b7280',
+  },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 16,
   },
   playAgainButton: {
     backgroundColor: '#10b981',

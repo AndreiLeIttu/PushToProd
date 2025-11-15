@@ -1,32 +1,128 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
+import InitialQuiz from './components/InitialQuiz';
 import StartScreen from './components/StartScreen';
+import ConceptsLibrary from './components/ConceptsLibrary';
 import GameScreen from './components/GameScreen';
 import EndScreen from './components/EndScreen';
 import LoadingSpinner from './components/LoadingSpinner';
-import { GameState, PlayerStats, Scenario, ConceptToReview } from './types';
-import { fetchInitialScenario, fetchNextScenario, fetchGameSummary } from './services/geminiService';
+import NavigationBar from './components/NavigationBar';
+import { GameState, PlayerStats, Scenario, ConceptToReview, GameGrade, AnswerQuality, LiteracyLevel } from './types';
+import { 
+  initializeProfile, 
+  startLife, 
+  fetchInitialScenario, 
+  fetchNextScenario, 
+  fetchGameSummary,
+  convertSummaryToFrontend
+} from './services/backendService';
 
 const App: React.FC = () => {
-  const [gameState, setGameState] = useState<GameState>('start');
+  const [gameState, setGameState] = useState<GameState>('quiz');
+  const [userAge, setUserAge] = useState<number>(18);
+  const [literacyLevel, setLiteracyLevel] = useState<LiteracyLevel>('beginner');
   const [playerStats, setPlayerStats] = useState<PlayerStats>({ age: 18, netWorth: 1000 });
   const [scenario, setScenario] = useState<Scenario | null>(null);
-  const [unmasteredConcepts, setUnmasteredConcepts] = useState<string[]>(['Budgeting', 'Saving', 'Investing', 'Credit', 'Debt']);
+  const [studiedConcepts, setStudiedConcepts] = useState<string[]>([]);
   const [masteredConcepts, setMasteredConcepts] = useState<string[]>([]);
+  const [unmasteredConcepts, setUnmasteredConcepts] = useState<string[]>([]);
   const [gameSummary, setGameSummary] = useState<{ overallSummary: string; conceptsToReview: ConceptToReview[] } | null>(null);
+  const [gameGrade, setGameGrade] = useState<GameGrade | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [goodAnswers, setGoodAnswers] = useState(0);
+  const [neutralAnswers, setNeutralAnswers] = useState(0);
+  const [badAnswers, setBadAnswers] = useState(0);
+  const [totalQuestions, setTotalQuestions] = useState(0);
+  const [wrongConcepts, setWrongConcepts] = useState<string[]>([]);
+  const [selectedConceptId, setSelectedConceptId] = useState<string | null>(null);
+  
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    // Fade in animation when game state changes
+    fadeAnim.setValue(0);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
+  }, [gameState]);
+
+  const calculateGrade = (good: number, neutral: number, bad: number, total: number): GameGrade => {
+    // Grade based on avoiding bad answers
+    // Good answers = full points, neutral = partial points, bad = no points
+    // Score = (good * 1.0 + neutral * 0.5) / total
+    const score = total > 0 ? (good * 1.0 + neutral * 0.5) / total : 0;
+    const percentage = score * 100;
+    
+    let letterGrade: string;
+    if (percentage >= 90) letterGrade = 'A';
+    else if (percentage >= 80) letterGrade = 'B';
+    else if (percentage >= 70) letterGrade = 'C';
+    else if (percentage >= 60) letterGrade = 'D';
+    else letterGrade = 'F';
+    
+    return {
+      score: good + neutral * 0.5,
+      percentage: Math.round(percentage),
+      letterGrade,
+      totalQuestions: total,
+      goodAnswers: good,
+      neutralAnswers: neutral,
+      badAnswers: bad,
+    };
+  };
+
+  const handleQuizSubmit = async (age: number, level: LiteracyLevel) => {
+    setGameState('loading');
+    setError(null);
+    
+    try {
+      // Initialize profile with backend
+      await initializeProfile(age, level);
+      setUserAge(age);
+      setLiteracyLevel(level);
+      setGameState('start');
+    } catch (e) {
+      const errorMessage = e instanceof Error ? e.message : 'Failed to initialize profile. Please try again.';
+      setError(errorMessage);
+      setGameState('error');
+      console.error('Profile initialization error:', e);
+    }
+  };
+
+  const handleConceptStudied = (conceptId: string) => {
+    if (!studiedConcepts.includes(conceptId)) {
+      setStudiedConcepts(prev => [...prev, conceptId]);
+    }
+  };
 
   const startGame = useCallback(async () => {
     setGameState('loading');
     setError(null);
+    setGoodAnswers(0);
+    setNeutralAnswers(0);
+    setBadAnswers(0);
+    setTotalQuestions(0);
+    setWrongConcepts([]);
+    
+    // Always use all default concepts for simulation
+    const initialUnmastered = ['Budgeting', 'Saving', 'Investing', 'Credit', 'Debt', 'Retirement Planning', 'Insurance', 'Taxes'];
+    
+    setUnmasteredConcepts(initialUnmastered);
+    setMasteredConcepts([]);
+    
     try {
+      // Start life in backend
+      const lifeState = await startLife();
+      
+      // Get initial scenario
       const initialScenario = await fetchInitialScenario();
       setScenario(initialScenario);
-      setPlayerStats({ age: 18, netWorth: 1000 });
-      setUnmasteredConcepts(['Budgeting', 'Saving', 'Investing', 'Credit', 'Debt']);
-      setMasteredConcepts([]);
+      setPlayerStats({ age: lifeState.game_age, netWorth: lifeState.balance });
       setGameSummary(null);
+      setGameGrade(null);
       setGameState('playing');
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : 'Failed to start the game. Please try again.';
@@ -34,43 +130,68 @@ const App: React.FC = () => {
       setGameState('error');
       console.error('Game start error:', e);
     }
-  }, []);
+  }, [studiedConcepts]);
 
   const handleAnswerSubmit = useCallback(async (answer: string) => {
     setGameState('loading');
     setError(null);
-    
-    const newAge = playerStats.age + 5;
 
     try {
-      const { scenario: nextScenario, analysis } = await fetchNextScenario({
-        age: newAge,
+      const { scenario: nextScenario, analysis, lifeState: updatedLifeState } = await fetchNextScenario({
+        age: playerStats.age,
         netWorth: playerStats.netWorth,
         previousScenario: scenario!,
         userAnswer: answer,
         masteredConcepts,
         unmasteredConcepts,
+        studiedConcepts,
       });
 
-      // Update concepts based on the analysis
+      // Track answer quality and total questions
+      setTotalQuestions(prev => prev + 1);
+      if (analysis.quality === 'good') {
+        setGoodAnswers(prev => prev + 1);
+      } else if (analysis.quality === 'neutral') {
+        setNeutralAnswers(prev => prev + 1);
+      } else if (analysis.quality === 'bad') {
+        setBadAnswers(prev => prev + 1);
+      }
+
+      // Update concepts based on the analysis (only mark as mastered if good, mark as unmastered if bad)
       if (scenario?.financialConcept) {
-        if (analysis.correct) {
+        if (analysis.quality === 'good') {
           if (!masteredConcepts.includes(scenario.financialConcept)) {
             setMasteredConcepts(prev => [...prev, scenario.financialConcept]);
             setUnmasteredConcepts(prev => prev.filter(c => c !== scenario.financialConcept));
           }
-        } else {
+          // Remove from wrong concepts if it was there
+          setWrongConcepts(prev => prev.filter(c => c !== scenario.financialConcept));
+        } else if (analysis.quality === 'bad') {
            if (!unmasteredConcepts.includes(scenario.financialConcept)) {
             setUnmasteredConcepts(prev => [...prev, scenario.financialConcept]);
+          }
+          // Add to wrong concepts if not already there
+          if (!wrongConcepts.includes(scenario.financialConcept)) {
+            setWrongConcepts(prev => [...prev, scenario.financialConcept]);
           }
         }
       }
 
-      setPlayerStats(prev => ({ ...prev, age: newAge }));
+      // Update player stats with backend data
+      const newAge = updatedLifeState.game_age;
+      const newNetWorth = updatedLifeState.balance;
 
       if (newAge >= 68) { // End game condition
         try {
-          const summary = await fetchGameSummary(unmasteredConcepts);
+          const backendSummary = await fetchGameSummary();
+          const summary = convertSummaryToFrontend(backendSummary);
+          // Calculate grade with current answer included
+          const finalGood = goodAnswers + (analysis.quality === 'good' ? 1 : 0);
+          const finalNeutral = neutralAnswers + (analysis.quality === 'neutral' ? 1 : 0);
+          const finalBad = badAnswers + (analysis.quality === 'bad' ? 1 : 0);
+          const finalTotal = totalQuestions + 1;
+          const grade = calculateGrade(finalGood, finalNeutral, finalBad, finalTotal);
+          setGameGrade(grade);
           setGameSummary(summary);
           setGameState('end');
         } catch (e) {
@@ -83,9 +204,7 @@ const App: React.FC = () => {
       }
 
       setScenario(nextScenario);
-      // A more complex game would update net worth based on the choice.
-      // For this hackathon version, we keep it simple.
-      setPlayerStats(prev => ({ ...prev, netWorth: prev.netWorth + Math.floor(Math.random() * 5000) - 1000 }));
+      setPlayerStats({ age: newAge, netWorth: newNetWorth });
       setGameState('playing');
     } catch (e) {
       const errorMessage = e instanceof Error ? e.message : 'Failed to load the next part of your story. Please try again.';
@@ -93,16 +212,62 @@ const App: React.FC = () => {
       setGameState('error');
       console.error('Next scenario error:', e);
     }
-  }, [playerStats, scenario, masteredConcepts, unmasteredConcepts]);
+  }, [playerStats, scenario, masteredConcepts, unmasteredConcepts, studiedConcepts, goodAnswers, neutralAnswers, badAnswers, totalQuestions, wrongConcepts]);
 
   const renderContent = () => {
     switch (gameState) {
+      case 'quiz':
+        return <InitialQuiz onSubmit={handleQuizSubmit} />;
       case 'start':
-        return <StartScreen onStart={startGame} />;
+        return (
+          <StartScreen 
+            onStartSimulation={startGame}
+            onStudyConcepts={() => setGameState('concepts')}
+          />
+        );
+      case 'concepts':
+        return (
+          <ConceptsLibrary
+            onBack={() => {
+              setGameState('start');
+              setSelectedConceptId(null);
+            }}
+            studiedConcepts={studiedConcepts}
+            onConceptStudied={handleConceptStudied}
+            selectedConceptId={selectedConceptId}
+            onConceptSelected={() => setSelectedConceptId(null)}
+          />
+        );
       case 'playing':
         return scenario ? <GameScreen scenario={scenario} playerStats={playerStats} onAnswerSubmit={handleAnswerSubmit} /> : <LoadingSpinner />;
       case 'end':
-        return gameSummary ? <EndScreen summary={gameSummary} onPlayAgain={startGame} /> : <LoadingSpinner />;
+        return gameSummary && gameGrade ? (
+          <EndScreen 
+            summary={gameSummary} 
+            grade={gameGrade}
+            wrongConcepts={wrongConcepts}
+            onConceptPress={(conceptName) => {
+              // Map concept name to concept ID
+              const conceptMap: Record<string, string> = {
+                'Budgeting': 'budgeting',
+                'Saving': 'saving',
+                'Investing': 'investing',
+                'Credit': 'credit',
+                'Debt': 'debt',
+                'Retirement Planning': 'retirement',
+                'Insurance': 'insurance',
+                'Taxes': 'taxes',
+              };
+              const conceptId = conceptMap[conceptName] || conceptName.toLowerCase();
+              setSelectedConceptId(conceptId);
+              setGameState('concepts');
+            }}
+            onPlayAgain={() => {
+              setStudiedConcepts([]);
+              setGameState('start');
+            }} 
+          />
+        ) : <LoadingSpinner />;
       case 'loading':
         return <LoadingSpinner />;
       case 'error':
@@ -116,16 +281,43 @@ const App: React.FC = () => {
           </View>
         );
       default:
-        return <StartScreen onStart={startGame} />;
+        return <InitialQuiz onSubmit={handleQuizSubmit} />;
     }
+  };
+
+  const showNavBar = gameState === 'start' || gameState === 'concepts' || gameState === 'playing';
+  const getCurrentScreen = () => {
+    if (gameState === 'concepts') return 'concepts';
+    if (gameState === 'playing') return 'start'; // Show as "Home" during game
+    if (gameState === 'start') return 'start';
+    return 'start';
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <StatusBar style="auto" />
-      <View style={styles.content}>
+      <Animated.View style={[styles.content, { opacity: fadeAnim }]}>
         {renderContent()}
-      </View>
+      </Animated.View>
+      {showNavBar && (
+        <NavigationBar
+          currentScreen={getCurrentScreen()}
+          onNavigate={(screen) => {
+            if (screen === 'concepts') {
+              setGameState('concepts');
+            } else if (screen === 'start') {
+              // If playing, go back to start screen (this will pause/exit the game)
+              if (gameState === 'playing') {
+                // Optionally show a confirmation or just go back
+                setGameState('start');
+              } else {
+                setGameState('start');
+                setSelectedConceptId(null);
+              }
+            }
+          }}
+        />
+      )}
     </SafeAreaView>
   );
 };

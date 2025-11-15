@@ -1,11 +1,27 @@
-import { Scenario, ConceptToReview, NextScenarioParams } from '../types';
+import { Scenario, ConceptToReview, NextScenarioParams, AnswerQuality } from '../types';
 
 // Mock data for testing without API
 // Simulate a delay to make it feel more realistic
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export const fetchInitialScenario = async (): Promise<Scenario> => {
+const conceptMap: Record<string, string> = {
+  'budgeting': 'Budgeting',
+  'saving': 'Saving',
+  'investing': 'Investing',
+  'credit': 'Credit',
+  'debt': 'Debt',
+  'retirement': 'Retirement',
+  'insurance': 'Insurance',
+  'taxes': 'Taxes',
+};
+
+export const fetchInitialScenario = async (studiedConcepts: string[] = []): Promise<Scenario> => {
     await delay(800); // Simulate API call delay
+    
+    // Use first studied concept or default to Budgeting
+    const firstConcept = studiedConcepts.length > 0 
+      ? conceptMap[studiedConcepts[0]] || 'Budgeting'
+      : 'Budgeting';
     
     return {
         scenario: "Welcome to FinQuest! You're 18 years old and just graduated high school. You've received $1,000 as a graduation gift from your family. This is your first real money to manage!",
@@ -24,17 +40,29 @@ export const fetchInitialScenario = async (): Promise<Scenario> => {
                 outcome: "You save most of it but also treat yourself. This balanced approach helps you learn to manage money."
             }
         ],
-        financialConcept: "Budgeting"
+        financialConcept: firstConcept
     };
 };
 
-export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ scenario: Scenario; analysis: { correct: boolean; } }> => {
-    const { age, netWorth, previousScenario, userAnswer, masteredConcepts, unmasteredConcepts } = params;
+export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ scenario: Scenario; analysis: { quality: AnswerQuality } }> => {
+    const { age, netWorth, previousScenario, userAnswer, masteredConcepts, unmasteredConcepts, studiedConcepts } = params;
 
     await delay(800); // Simulate API call delay
     
+    // Helper function to determine answer quality
+    const getAnswerQuality = (answer: string, goodKeywords: string[], badKeywords: string[]): AnswerQuality => {
+        const lowerAnswer = answer.toLowerCase();
+        if (badKeywords.some(keyword => lowerAnswer.includes(keyword.toLowerCase()))) {
+            return 'bad';
+        }
+        if (goodKeywords.some(keyword => lowerAnswer.includes(keyword.toLowerCase()))) {
+            return 'good';
+        }
+        return 'neutral';
+    };
+    
     // Mock scenarios based on age
-    const scenarios: Record<number, { scenario: Scenario; analysis: { correct: boolean } }> = {
+    const scenarios: Record<number, { scenario: Scenario; analysis: { quality: AnswerQuality } }> = {
         23: {
             scenario: {
                 scenario: `You're now ${age} years old and working part-time while in college. You've managed to save some money and your net worth is $${netWorth.toLocaleString()}. Your friends are all getting credit cards and encouraging you to get one too.`,
@@ -55,7 +83,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Credit"
             },
-            analysis: { correct: userAnswer.includes("responsibly") || userAnswer.includes("paying it off") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["responsibly", "paying it off", "pay off", "full balance"],
+                    ["use it for everything", "everything"]
+                )
+            }
         },
         28: {
             scenario: {
@@ -77,7 +111,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Investing"
             },
-            analysis: { correct: userAnswer.includes("investing") || userAnswer.includes("retirement account") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["investing", "retirement account", "retirement"],
+                    ["wait", "older"]
+                )
+            }
         },
         33: {
             scenario: {
@@ -99,7 +139,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Debt"
             },
-            analysis: { correct: userAnswer.includes("used car") && userAnswer.includes("cash") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["used car", "cash"],
+                    ["new car", "deserve it", "lease"]
+                )
+            }
         },
         38: {
             scenario: {
@@ -121,7 +167,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Saving"
             },
-            analysis: { correct: userAnswer.includes("save") || userAnswer.includes("down payment") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["save", "down payment", "larger"],
+                    ["biggest house", "stretch"]
+                )
+            }
         },
         43: {
             scenario: {
@@ -143,7 +195,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Investing"
             },
-            analysis: { correct: userAnswer.includes("diversify") || userAnswer.includes("different investments") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["diversify", "different investments", "spread"],
+                    ["one stock", "all in one"]
+                )
+            }
         },
         48: {
             scenario: {
@@ -165,7 +223,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Saving"
             },
-            analysis: { correct: userAnswer.includes("balance") || userAnswer.includes("both") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["balance", "both", "education and retirement"],
+                    ["only on kids", "only on retirement", "neglect"]
+                )
+            }
         },
         53: {
             scenario: {
@@ -187,7 +251,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Investing"
             },
-            analysis: { correct: userAnswer.includes("conservative") || userAnswer.includes("protect") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["conservative", "protect", "shift"],
+                    ["more risks", "stop saving", "enough"]
+                )
+            }
         },
         58: {
             scenario: {
@@ -209,7 +279,13 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Budgeting"
             },
-            analysis: { correct: userAnswer.includes("budget") || userAnswer.includes("plan") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["budget", "plan", "strategy"],
+                    ["immediately", "enough"]
+                )
+            }
         },
         63: {
             scenario: {
@@ -231,19 +307,22 @@ export const fetchNextScenario = async (params: NextScenarioParams): Promise<{ s
                 ],
                 financialConcept: "Budgeting"
             },
-            analysis: { correct: userAnswer.includes("4%") || userAnswer.includes("sustainable") }
+            analysis: { 
+                quality: getAnswerQuality(
+                    userAnswer,
+                    ["4%", "sustainable", "withdraw", "rule"],
+                    ["as much as you want", "freely"]
+                )
+            }
         }
     };
     
     // Get scenario for current age, or use a default one
     const scenarioData = scenarios[age] || scenarios[23];
     
-    // Determine if answer was correct based on the analysis
-    const isCorrect = scenarioData.analysis.correct;
-    
     return {
         scenario: scenarioData.scenario,
-        analysis: { correct: isCorrect }
+        analysis: { quality: scenarioData.analysis.quality }
     };
 };
 

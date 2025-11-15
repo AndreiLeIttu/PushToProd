@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated } from 'react-native';
 import { Scenario, PlayerStats } from '../types';
 import { UserIcon } from './icons/UserIcon';
 import { WalletIcon } from './icons/WalletIcon';
@@ -13,6 +13,28 @@ interface GameScreenProps {
 const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswerSubmit }) => {
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    // Animate content in when scenario changes
+    fadeAnim.setValue(0);
+    slideAnim.setValue(30);
+    
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 400,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 400,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, [scenario]);
 
   const handleSubmit = () => {
     if (!selectedOption) return;
@@ -20,9 +42,42 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
     onAnswerSubmit(selectedOption);
   };
 
+  const optionAnimations = scenario.options.map(() => useRef(new Animated.Value(1)).current);
+
+  const handleOptionPress = (index: number, optionText: string) => {
+    // Animate selected option
+    Animated.sequence([
+      Animated.timing(optionAnimations[index], {
+        toValue: 0.95,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.spring(optionAnimations[index], {
+        toValue: 1,
+        tension: 300,
+        friction: 10,
+        useNativeDriver: true,
+      }),
+    ]).start();
+    
+    setSelectedOption(optionText);
+  };
+
   return (
-    <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <View style={styles.statsContainer}>
+    <ScrollView 
+      style={styles.container} 
+      contentContainerStyle={styles.contentContainer}
+      showsVerticalScrollIndicator={false}
+    >
+      <Animated.View
+        style={[
+          styles.statsContainer,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          },
+        ]}
+      >
         <View style={styles.statItem}>
           <UserIcon width={32} height={32} color="#06b6d4" />
           <View style={styles.statTextContainer}>
@@ -37,42 +92,63 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
             <Text style={styles.statValue}>${playerStats.netWorth.toLocaleString()}</Text>
           </View>
         </View>
-      </View>
+      </Animated.View>
 
-      <View style={styles.scenarioContainer}>
+      <Animated.View
+        style={[
+          styles.scenarioContainer,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }],
+          },
+        ]}
+      >
         <Text style={styles.scenarioText}>{scenario.scenario}</Text>
         <Text style={styles.question}>{scenario.question}</Text>
         
         <View style={styles.optionsContainer}>
-          {scenario.options.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => setSelectedOption(option.text)}
-              style={[
-                styles.optionButton,
-                selectedOption === option.text && styles.optionButtonSelected
-              ]}
-            >
-              <Text style={[
-                styles.optionText,
-                selectedOption === option.text && styles.optionTextSelected
-              ]}>
-                {option.text}
-              </Text>
-            </TouchableOpacity>
-          ))}
+          {scenario.options.map((option, index) => {
+            const isSelected = selectedOption === option.text;
+            const buttonScale = optionAnimations[index];
+            
+            return (
+              <Animated.View
+                key={index}
+                style={{
+                  transform: [{ scale: buttonScale }],
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => handleOptionPress(index, option.text)}
+                  style={[
+                    styles.optionButton,
+                    isSelected && styles.optionButtonSelected
+                  ]}
+                  activeOpacity={0.7}
+                >
+                  <Text style={[
+                    styles.optionText,
+                    isSelected && styles.optionTextSelected
+                  ]}>
+                    {option.text}
+                  </Text>
+                </TouchableOpacity>
+              </Animated.View>
+            );
+          })}
         </View>
 
         <TouchableOpacity
           onPress={handleSubmit}
           disabled={!selectedOption || isLoading}
           style={[styles.submitButton, (!selectedOption || isLoading) && styles.submitButtonDisabled]}
+          activeOpacity={0.8}
         >
           <Text style={styles.submitButtonText}>
             {isLoading ? 'Loading...' : 'Make Choice'}
           </Text>
         </TouchableOpacity>
-      </View>
+      </Animated.View>
     </ScrollView>
   );
 };
@@ -84,6 +160,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 24,
+    paddingBottom: 40,
   },
   statsContainer: {
     flexDirection: 'row',

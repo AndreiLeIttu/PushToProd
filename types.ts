@@ -1,5 +1,6 @@
 
-export type GameState = 'start' | 'playing' | 'loading' | 'end' | 'error';
+export type GameState = 'quiz' | 'start' | 'concepts' | 'playing' | 'loading' | 'end' | 'error';
+export type LiteracyLevel = 'beginner' | 'medium' | 'advanced';
 
 export interface PlayerStats {
   age: number;
@@ -29,4 +30,17 @@ export interface NextScenarioParams {
   userAnswer: string;
   masteredConcepts: string[];
   unmasteredConcepts: string[];
+  studiedConcepts: string[];
+}
+
+export type AnswerQuality = 'good' | 'neutral' | 'bad';
+
+export interface GameGrade {
+  score: number;
+  percentage: number;
+  letterGrade: string;
+  totalQuestions: number;
+  goodAnswers: number;
+  neutralAnswers: number;
+  badAnswers: number;
 }

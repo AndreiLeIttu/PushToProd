@@ -81,13 +81,49 @@ npm run web
 
 ```
 
+## Backend Integration
+
+This app is now integrated with a FastAPI backend for generating questions and summaries.
+
+### Backend Setup
+
+1. Navigate to the backend directory:
+   ```bash
+   cd ../BackendPushToProd
+   ```
+
+2. Install Python dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. Set up environment variables:
+   Create a `.env` file with your OpenAI API key:
+   ```
+   OPENAI_API_KEY=your_api_key_here
+   ```
+
+4. Start the backend server:
+   ```bash
+   uvicorn main:app --reload
+   ```
+   
+   The backend will run on `http://localhost:8000` by default.
+
+### Frontend Configuration
+
+The frontend is configured to connect to the backend at `http://localhost:8000` by default. To change this:
+
+1. Update the `API_BASE_URL` in `PushToProd/services/backendService.ts`
+2. Or set the `REACT_APP_API_URL` environment variable (if using web build)
+
 ## Development
 
 The app uses:
 - **React Native** with **Expo** for cross-platform development
 - **TypeScript** for type safety
 - **react-native-svg** for icons
-- Mock data (no API key required for testing)
+- **FastAPI Backend** for AI-powered question generation and summaries
 
 ## Building for Production
 
@@ -108,11 +144,21 @@ eas build --platform ios
 eas build --platform android
 ```
 
+## API Endpoints
+
+The backend provides the following endpoints:
+- `POST /questionnaire` - Initialize user profile with age and literacy level
+- `POST /start_life` - Start the game simulation
+- `GET /next_question` - Get the next financial scenario/question
+- `POST /answer_question` - Submit an answer and update game state
+- `GET /summary` - Get personalized summary with weak points
+- `GET /profile` - Get current user profile
+
 ## Notes
 
-- The app currently uses mock data, so no API key is required
-- All game scenarios are hardcoded for testing purposes
-- The app works offline once installed
+- The backend requires an OpenAI API key for question generation
+- Make sure the backend is running before starting the frontend
+- The app connects to `http://localhost:8000` by default (update in `backendService.ts` for production)
 
 ## License
 
