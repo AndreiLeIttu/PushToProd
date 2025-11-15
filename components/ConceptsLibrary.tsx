@@ -689,8 +689,8 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   quizOptionCorrect: {
-    backgroundColor: '#e6f0ff',
-    borderColor: '#022E6B',
+    backgroundColor: '#dcfce7',
+    borderColor: '#16a34a',
   },
   quizOptionWrong: {
     backgroundColor: '#fee2e2',
@@ -701,7 +701,7 @@ const styles = StyleSheet.create({
     color: '#111827',
   },
   quizOptionTextCorrect: {
-    color: '#022E6B',
+    color: '#166534',
     fontWeight: '600',
   },
   quizOptionTextWrong: {
