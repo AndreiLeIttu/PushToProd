@@ -26,7 +26,7 @@ interface Concept {
 
 const ALL_CONCEPTS: Concept[] = [
   {
-    id: 'saving',
+    id: 'savings',
     name: 'Savings',
     description: 'Saving means putting money aside for future use. It\'s important to save for emergencies, big purchases, and long-term goals like retirement. It\'s like saving a few of your favorite snacks now so you\'ll have them when you really want them later.',
     quizQuestion: 'How much of your income should you try to save?',
@@ -39,7 +39,7 @@ const ALL_CONCEPTS: Concept[] = [
     quizExplanation: 'Financial experts recommend saving at least 10-20% of your income. This helps you build an emergency fund and work toward your financial goals.'
   },
   {
-    id: 'investing',
+    id: 'investing-basics',
     name: 'Investing Basics',
     description: 'Investing means using your money to buy assets (like stocks, bonds, or real estate) that can grow in value over time. It\'s riskier than saving but can help your money grow faster.',
     quizQuestion: 'What is a key principle of investing?',
@@ -65,7 +65,7 @@ const ALL_CONCEPTS: Concept[] = [
     quizExplanation: 'Using a credit card responsibly (paying the full balance each month) helps you build good credit without paying interest or accumulating debt.'
   },
   {
-    id: 'debt',
+    id: 'loans-&-debt',
     name: 'Loans & Debt',
     description: 'Loans and debt mean borrowing money now and paying it back later with some extra added. It\'s like borrowing a friend\'s bike—you return it, but you might also clean it or bring them a snack because they helped you out.',
     quizQuestion: 'When is it okay to take on debt?',
@@ -91,7 +91,7 @@ const ALL_CONCEPTS: Concept[] = [
     quizExplanation: 'Insurance transfers financial risk to an insurance company. You pay premiums, and in exchange, the company covers losses from covered events.'
   },
   {
-    id: 'taxes',
+    id: 'income,-paychecks-&-taxes',
     name: 'Income, Paychecks & Taxes',
     description: 'Income is the money you earn, and taxes are small parts taken by the government to pay for things like schools, roads, and hospitals. It\'s like earning a pizza and giving a few slices to help keep the home running—like paying for Wi-Fi or electricity.',
     quizQuestion: 'What is a benefit of contributing to a 401(k) retirement account?',
@@ -104,7 +104,7 @@ const ALL_CONCEPTS: Concept[] = [
     quizExplanation: '401(k) contributions reduce your taxable income now, and the money grows tax-deferred until you withdraw it in retirement.'
   },
   {
-    id: "charity",
+    id: "sharing/charity",
     name: "Sharing/Charity",
     description: "Sharing or giving to charity means using a bit of your money to help others or support a cause you care about. It's like sharing a pencil or snack with a friend who forgot theirs - it costs you little, but means a lot to them.",
     quizQuestion: 'Why is donating a small part of your money to charity considered a good financial habit?',
@@ -146,7 +146,7 @@ const ALL_CONCEPTS: Concept[] = [
     quizQuestion: 'A bakery can make only 20 cupcakes each morning. On some days they have leftover cupcakes, and on other days they sell out before noon. What does this situation show?'
   },
   {
-    id: "budgeting",
+    id: "simple-budgeting",
     name: "Simple Budgeting",
     description: "Budgeting means planning how to divide your money between needs, wants, and savings. It's like managing your stamina in a game—if you use it all at once, you run out fast, but if you spread it out, you last longer.",
     correctAnswerIndex: 2,
@@ -160,7 +160,7 @@ const ALL_CONCEPTS: Concept[] = [
     quizQuestion: 'You get $10 a week. You want a $12 toy, but you also like buying snacks. What should a good budget help you do?'
   },
   {
-    id: "banks-account",
+    id: "banks-&-account",
     name: "Banks & Account",
     description: "A bank keeps your money safe and helps you store, move, or grow it. It's like having a super-secure digital backpack—you can access it anytime and can't lose it like cash in your pocket.",
     correctAnswerIndex: 3,
@@ -188,7 +188,7 @@ const ALL_CONCEPTS: Concept[] = [
     correctAnswerIndex: 0
   },
   {
-    id: 'short-long-term',
+    id: 'short-term-vs-long-term',
     name: 'Short-term vs long-term',
     description: 'Short-term goals are things you want soon, while long-term goals take more time and planning. It\'s like a sprint versus a marathon—a sprint is quick like saving for headphones, while a marathon is slow and steady like saving for a laptop.',
     quizExplanation: 'A long-term choice is something you save for over time, like the backpack next month.',
@@ -202,7 +202,7 @@ const ALL_CONCEPTS: Concept[] = [
     correctAnswerIndex: 1
   },
   {
-    id: 'stocks-bonds-funds',
+    id: 'stocks,-bonds-&-mutual-funds',
     name: 'Stocks, Bonds & Mutual Funds',
     description: 'Stocks let you own part of a company, bonds let you lend money for a promise of extra repayment, and mutual funds let many people invest together. It\'s like owning a slice of a big pizza (stocks), lending a friend $10 and getting $12 back (bonds), or pooling money with friends to buy a big pizza and sharing it (mutual funds).',
     quizExplanation: 'Stocks make you part owner of a company, while bonds are loans you give and get back with interest.',
@@ -216,7 +216,7 @@ const ALL_CONCEPTS: Concept[] = [
     correctAnswerIndex: 0
   },
   {
-    id: 'risks-diversification',
+    id: 'risks-&-diversification',
     name: 'Risks & Diversification',
     description: 'Risk means your investment can go up or down, and diversification means spreading your money across different things so one mistake doesn\'t ruin everything. It\'s like carrying eggs in multiple baskets—if you drop one, the rest are still safe.',
     quizExplanation: 'Diversification lowers risk because if one investment loses value, the others can help balance it out.',
