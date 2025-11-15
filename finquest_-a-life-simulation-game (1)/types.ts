@@ -1,0 +1,32 @@
+
+export type GameState = 'start' | 'playing' | 'loading' | 'end' | 'error';
+
+export interface PlayerStats {
+  age: number;
+  netWorth: number;
+}
+
+export interface Scenario {
+  scenario: string;
+  question: string;
+  options: { text: string; outcome: string; }[];
+  financialConcept: string;
+}
+
+export interface ConceptToReview {
+  concept: string;
+  description: string;
+  question: string;
+  options: string[];
+  correctAnswerIndex: number;
+  explanation: string;
+}
+
+export interface NextScenarioParams {
+  age: number;
+  netWorth: number;
+  previousScenario: Scenario;
+  userAnswer: string;
+  masteredConcepts: string[];
+  unmasteredConcepts: string[];
+}
