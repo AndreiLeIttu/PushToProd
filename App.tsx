@@ -36,6 +36,7 @@ const App: React.FC = () => {
   const [totalQuestions, setTotalQuestions] = useState(0);
   const [wrongConcepts, setWrongConcepts] = useState<string[]>([]);
   const [selectedConceptId, setSelectedConceptId] = useState<string | null>(null);
+  const [currentStreak, setCurrentStreak] = useState(0);
   
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
@@ -225,7 +226,7 @@ const App: React.FC = () => {
           />
         );
       case 'playing':
-        return scenario ? <GameScreen scenario={scenario} playerStats={playerStats} onAnswerSubmit={handleAnswerSubmit} /> : <LoadingSpinner />;
+        return scenario ? <GameScreen scenario={scenario} playerStats={playerStats} onAnswerSubmit={handleAnswerSubmit} streak={currentStreak} setStreak={setCurrentStreak}/> : <LoadingSpinner />;
       case 'end':
         return gameSummary && gameGrade ? (
           <EndScreen 

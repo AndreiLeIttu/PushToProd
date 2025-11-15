@@ -38,14 +38,14 @@ interface BackendOption {
       inflation: number;
       interest: number;
     };
-    description?: string;
+    description: string;
   };
 }
 
 interface BackendFinancialEvent {
   event_id: string;
   event_content: string;
-  hint: string; 
+  hint: string;
   options: BackendOption[];
 }
 
@@ -95,7 +95,6 @@ export const startLife = async (): Promise<BackendLifeState> => {
 };
 
 export const fetchNextQuestion = async (): Promise<BackendFinancialEvent> => {
-  console.log("w3fawtgwagnawognwaeognawe[ogbaepogbaegon")
   const response = await fetch(`${API_BASE_URL}/next_question`, {
     method: 'GET',
     headers: {
@@ -159,22 +158,20 @@ export const getProfile = async () => {
 };
 
 export const convertEventToScenario = (event: BackendFinancialEvent): Scenario => {
-  const financialConcept = "Financial Decision";
   return {
     scenario: event.event_content,
     question: event.event_content,
     options: event.options.map(opt => ({
       text: opt.content,
-      outcome: opt.consequence.description || `You chose: ${opt.content}`,
+      outcome: opt.consequence.description,
       moneyDelta: opt.consequence.money_delta
     })),
-    financialConcept,
+    financialConcept: "Financial Decision",
     hint: event.hint,
   };
 };
 
 const determineAnswerQuality = (consequence: BackendOption['consequence']): AnswerQuality => {
-
   const knowledgeSum = Object.values(consequence.knowledge_delta).reduce((sum, val) => sum + val, 0);
   const traitsSum = Object.values(consequence.traits_delta).reduce((sum, val) => sum + val, 0);
 
@@ -200,7 +197,6 @@ export const fetchNextScenario = async (
   analysis: { quality: AnswerQuality };
   lifeState: BackendLifeState;
 }> => {
-
   if (!currentEvent) {
     throw new Error('No current event available');
   }
@@ -212,7 +208,6 @@ export const fetchNextScenario = async (
   }
 
   const lifeState = await submitAnswer(selectedOption.consequence);
-  
   const quality = determineAnswerQuality(selectedOption.consequence);
 
   currentEvent = await fetchNextQuestion();
@@ -249,17 +244,6 @@ export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
     'interest': 'Credit',
   };
 
-  const conceptIdMap: Record<string, string> = {
-    'Investing': 'investing',
-    'Insurance': 'insurance',
-    'Retirement Planning': 'retirement',
-    'Budgeting': 'budgeting',
-    'Debt': 'debt',
-    'Saving': 'saving',
-    'Credit': 'credit',
-    'Taxes': 'taxes',
-  };
-
   const conceptsToReview = backendSummary.weakest_points.map(([name, score]) => {
     const conceptName = conceptNameMap[name] || name;
     return {
@@ -281,4 +265,3 @@ export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
     conceptsToReview,
   };
 };
-
