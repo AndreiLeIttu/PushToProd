@@ -1,476 +1,586 @@
 # Product Requirements Document (PRD)
 # Financial Literacy Learning App - React Native
 
-## 1. Product Overview
-
-### 1.1 Product Vision
-A mobile-first financial literacy learning application that helps users master personal finance concepts through interactive life simulations, AI-powered guidance, and adaptive learning paths.
-
-### 1.2 Target Audience
-- Young adults (18-35) starting their financial journey
-- Students entering the workforce
-- Anyone seeking to improve financial literacy
-- Users who prefer mobile, on-the-go learning
-
-### 1.3 Key Features
-- **Interactive Life Simulations** - Experience real financial decisions in simulated scenarios
-- **AI-Powered Chat Interface** - Get personalized guidance using LLM technology
-- **Concept Library** - Learn essential financial topics with quizzes
-- **Progress Tracking** - Monitor learning journey and achievements
-- **Mobile-First Design** - Native iOS and Android experience
-
-## 2. Technology Stack
-
-### 2.1 Frontend
-- **Framework**: React Native with Expo
-- **Language**: TypeScript
-- **UI Library**: React Native Paper (Material Design)
-- **Navigation**: React Navigation (Stack + Bottom Tabs)
-- **State Management**: React Context API
-
-### 2.2 Backend
-- **Database & Auth**: Supabase
-- **LLM Provider**: Featherless AI API
-- **Storage**: Supabase Storage (for user data)
-
-### 2.3 Development Tools
-- **Package Manager**: npm
-- **Version Control**: Git
-- **Testing**: Expo Go (development)
-- **Build**: Expo EAS Build (production)
-
-## 3. Feature Specifications
-
-### Phase 1: Foundation (COMPLETED ✅)
-**Status**: Delivered
-
-**Completed Features**:
-- ✅ React Native project setup with Expo
-- ✅ TypeScript configuration
-- ✅ React Native Paper UI integration
-- ✅ Navigation structure (Stack + Tabs)
-- ✅ Authentication screens (Welcome, Login, Register)
-- ✅ Main app screens (Dashboard, Simulation, Concepts, Profile)
-- ✅ Mock authentication system with Context API
-- ✅ Basic layout and styling
-
-**Screens Implemented**:
-1. **Welcome Screen** - Landing page with Get Started/Sign In
-2. **Login Screen** - Email/password authentication
-3. **Register Screen** - New user signup
-4. **Dashboard** - Progress overview and quick actions
-5. **Simulation** - Life simulation introduction
-6. **Concepts** - Financial concepts library
-7. **Profile** - User info and settings
-
-### Phase 2: Backend Integration (PENDING)
-**Objective**: Connect to Supabase and implement real authentication
-
-**Tasks**:
-1. Set up Supabase Cloud project
-2. Create database schema:
-   - `users` table (id, email, name, created_at, updated_at)
-   - `user_profiles` table (user_id, progress, preferences)
-   - `simulations` table (id, user_id, scenario, state, decisions, created_at)
-   - `concepts` table (id, title, description, category, difficulty, content)
-   - `user_progress` table (user_id, concept_id, status, quiz_score, last_accessed)
-   - `chat_messages` table (id, user_id, simulation_id, role, content, timestamp)
-
-3. Implement Supabase authentication:
-   - Replace mock auth with real Supabase auth
-   - Add email verification
-   - Implement password reset
-   - Add session management
-   - Secure route protection
-
-4. Create Supabase Edge Functions:
-   - User onboarding
-   - Progress calculation
-   - Recommendation engine
-
-### Phase 3: Simulation Engine (PENDING)
-**Objective**: Build interactive life simulation system
-
-**Features**:
-1. **Simulation Flow**:
-   - Life stage progression (student → employee → retirement)
-   - Random life events (job offer, emergency, etc.)
-   - Financial decision points
-   - Consequence visualization
-   - Real-time budget tracking
-
-2. **Decision Types**:
-   - Income decisions (job selection, side hustle)
-   - Expense decisions (housing, transportation, lifestyle)
-   - Savings decisions (emergency fund, investments)
-   - Debt decisions (loans, credit cards, payoff strategy)
-
-3. **AI Integration**:
-   - LLM-powered scenario generation
-   - Context-aware financial advice
-   - Decision consequence explanation
-   - Personalized guidance
-
-4. **Simulation State Management**:
-   - Save/resume simulations
-   - Track decision history
-   - Calculate financial outcomes
-   - Generate learning insights
-
-### Phase 4: Concept Learning System (PENDING)
-**Objective**: Create structured learning modules
-
-**Features**:
-1. **Concept Categories**:
-   - Budgeting & Saving
-   - Credit & Debt
-   - Investing & Retirement
-   - Insurance & Risk Management
-   - Taxes & Financial Planning
-
-2. **Learning Content**:
-   - Clear explanations
-   - Real-world examples
-   - Visual diagrams
-   - Interactive quizzes
-   - Progress tracking
-
-3. **Adaptive Learning**:
-   - Personalized recommendations based on simulation performance
-   - Difficulty adjustment
-   - Spaced repetition
-   - Achievement system
-
-### Phase 5: AI Chat Interface (PENDING)
-**Objective**: Implement conversational learning assistant
-
-**Features**:
-1. **Chat Functionality**:
-   - Real-time messaging with LLM
-   - Context-aware responses
-   - Simulation-specific guidance
-   - Concept clarification
-
-2. **LLM Integration** (Featherless AI):
-   - Model: Meta-Llama-3.1-70B-Instruct
-   - Streaming responses
-   - Context window management
-   - Rate limiting
-
-3. **Chat Features**:
-   - Message history
-   - Code highlighting for examples
-   - Save important conversations
-   - Export chat transcripts
-
-### Phase 6: Progress & Analytics (PENDING)
-**Objective**: Track user learning journey
-
-**Features**:
-1. **Dashboard Metrics**:
-   - Simulations completed
-   - Concepts mastered
-   - Time spent learning
-   - Quiz scores
-   - Achievements earned
-
-2. **Progress Visualization**:
-   - Learning path progress bars
-   - Category completion charts
-   - Skill level indicators
-   - Streak tracking
-
-3. **Achievements**:
-   - Complete first simulation
-   - Master all beginner concepts
-   - Make 100 financial decisions
-   - 7-day learning streak
-   - Perfect quiz score
-
-### Phase 7: Polish & Launch (PENDING)
-**Objective**: Prepare for production release
-
-**Tasks**:
-1. **Performance Optimization**:
-   - Image optimization
-   - Code splitting
-   - Caching strategy
-   - Bundle size reduction
-
-2. **Testing**:
-   - Unit tests
-   - Integration tests
-   - E2E tests with Detox
-   - User acceptance testing
-
-3. **App Store Preparation**:
-   - App icons and splash screens
-   - Screenshots and previews
-   - App Store descriptions
-   - Privacy policy
-   - Terms of service
-
-4. **Launch**:
-   - Submit to Apple App Store
-   - Submit to Google Play Store
-   - Marketing materials
-   - User documentation
-
-## 4. User Flows
-
-### 4.1 First-Time User Flow
-1. Open app → Welcome Screen
-2. Tap "Get Started" → Register Screen
-3. Enter name, email, password → Create account
-4. Auto-login → Dashboard
-5. See onboarding tooltip → Explore features
-6. Tap "Start Simulation" → Begin first simulation
-
-### 4.2 Simulation Flow
-1. Dashboard → Tap "Start New Simulation"
-2. Choose simulation type (or random)
-3. Set initial parameters (age, income, etc.)
-4. Progress through life stages
-5. Make financial decisions at key moments
-6. See consequences of choices
-7. Get AI guidance when stuck
-8. Complete simulation → See results
-9. Receive concept recommendations
-10. Save simulation for later review
-
-### 4.3 Learning Flow
-1. Dashboard → Tap "Browse Concepts"
-2. Select category or difficulty
-3. Choose concept to learn
-4. Read explanation and examples
-5. Take quiz to test understanding
-6. See results and explanations
-7. Mark concept as complete
-8. Unlock next concept
-9. Track progress on dashboard
-
-## 5. Design Guidelines
-
-### 5.1 UI/UX Principles
-- **Mobile-First**: Optimized for thumb-friendly navigation
-- **Material Design**: Following React Native Paper guidelines
-- **Accessibility**: WCAG 2.1 AA compliance
-- **Performance**: Smooth 60fps animations
-- **Offline Support**: Core features work without internet
-
-### 5.2 Color Palette
-- **Primary**: `#6200ee` (Purple)
-- **Secondary**: `#03dac6` (Teal)
-- **Error**: `#b00020` (Red)
-- **Background**: `#ffffff` (White)
-- **Surface**: `#f5f5f5` (Light Gray)
-
-### 5.3 Typography
-- **Headlines**: 24-32px, Bold
-- **Body**: 16px, Regular
-- **Captions**: 12-14px, Regular
-- **Font Family**: System default (SF Pro on iOS, Roboto on Android)
-
-## 6. API Specifications
-
-### 6.1 Supabase Schema
-
-```sql
--- Users (handled by Supabase Auth)
-
--- User Profiles
-CREATE TABLE user_profiles (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  display_name TEXT,
-  avatar_url TEXT,
-  preferences JSONB DEFAULT '{}',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Simulations
-CREATE TABLE simulations (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  title TEXT NOT NULL,
-  scenario_type TEXT NOT NULL,
-  state JSONB NOT NULL,
-  decisions JSONB DEFAULT '[]',
-  completed BOOLEAN DEFAULT FALSE,
-  score INTEGER,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- Concepts
-CREATE TABLE concepts (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  title TEXT NOT NULL,
-  slug TEXT UNIQUE NOT NULL,
-  description TEXT,
-  category TEXT NOT NULL,
-  difficulty TEXT NOT NULL CHECK (difficulty IN ('Beginner', 'Intermediate', 'Advanced')),
-  content JSONB NOT NULL,
-  quiz_questions JSONB DEFAULT '[]',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- User Progress
-CREATE TABLE user_progress (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  concept_id UUID REFERENCES concepts(id) ON DELETE CASCADE,
-  status TEXT NOT NULL CHECK (status IN ('not_started', 'in_progress', 'completed')),
-  quiz_score INTEGER,
-  last_accessed TIMESTAMP WITH TIME ZONE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-  UNIQUE(user_id, concept_id)
-);
-
--- Chat Messages
-CREATE TABLE chat_messages (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  simulation_id UUID REFERENCES simulations(id) ON DELETE CASCADE,
-  role TEXT NOT NULL CHECK (role IN ('user', 'assistant', 'system')),
-  content TEXT NOT NULL,
-  metadata JSONB DEFAULT '{}',
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-```
-
-### 6.2 Featherless AI Integration
-
-```typescript
-// Example LLM call
-const response = await fetch('https://api.featherless.ai/v1/chat/completions', {
-  method: 'POST',
-  headers: {
-    'Authorization': `Bearer ${FEATHERLESS_API_KEY}`,
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify({
-    model: 'meta-llama/Meta-Llama-3.1-70B-Instruct',
-    messages: [
-      { role: 'system', content: 'You are a financial literacy coach...' },
-      { role: 'user', content: userMessage }
-    ],
-    stream: true,
-    max_tokens: 1000,
-    temperature: 0.7,
-  }),
-});
-```
-
-## 7. Security & Privacy
-
-### 7.1 Authentication
-- Supabase Auth with JWT tokens
-- Secure password hashing (bcrypt)
-- Email verification required
-- Session timeout after 7 days
-- Secure token storage (AsyncStorage with encryption)
-
-### 7.2 Data Protection
-- All API calls over HTTPS
-- Row-level security in Supabase
-- No sensitive data in logs
-- GDPR compliance
-- Data export functionality
-- Account deletion option
-
-### 7.3 API Security
-- Rate limiting on endpoints
-- API key rotation
-- No hardcoded secrets
-- Environment variable management
-
-## 8. Success Metrics
-
-### 8.1 Key Performance Indicators (KPIs)
-- **User Engagement**:
-  - Daily Active Users (DAU)
-  - Weekly Active Users (WAU)
-  - Average session duration
-  - Sessions per user per day
-
-- **Learning Metrics**:
-  - Simulations completed per user
-  - Concepts mastered per user
-  - Quiz completion rate
-  - Average quiz score
-
-- **Retention**:
-  - Day 1, 7, 30 retention rates
-  - Churn rate
-  - Return user rate
-
-### 8.2 Success Criteria
-- 70%+ Day 1 retention
-- 40%+ Day 7 retention
-- Average 3+ simulations completed per user
-- 80%+ quiz pass rate
-- 4.5+ star rating on app stores
-
-## 9. Future Enhancements
-
-### 9.1 Social Features
-- Share simulation results
-- Compete with friends
-- Community challenges
-- Discussion forums
-
-### 9.2 Advanced Features
-- AR/VR simulations
-- Voice-based interactions
-- Multi-language support
-- Parental controls for younger users
-
-### 9.3 Monetization (Future)
-- Freemium model
-- Premium simulations
-- Advanced analytics
-- 1-on-1 coaching
-
-## 10. Timeline & Milestones
-
-### Current Status: Phase 1 Complete ✅
-
-**Next 30 Days**:
-- Week 1-2: Phase 2 (Supabase integration)
-- Week 3-4: Phase 3 (Basic simulation engine)
-
-**Next 60 Days**:
-- Week 5-6: Phase 4 (Concept library)
-- Week 7-8: Phase 5 (AI chat interface)
-
-**Next 90 Days**:
-- Week 9-10: Phase 6 (Progress tracking)
-- Week 11-12: Phase 7 (Polish & testing)
-- Week 13: Launch preparation
-- Week 14: App Store submission
-
-## 11. Appendix
-
-### 11.1 Glossary
-- **Simulation**: Interactive scenario where users make financial decisions
-- **Concept**: Educational content about a financial topic
-- **Life Stage**: Phase in the simulation (student, employee, retiree)
-- **Decision Point**: Moment in simulation requiring user choice
-- **Consequence**: Result of a user's decision
-
-### 11.2 References
-- React Native Documentation
-- Expo Documentation
-- Supabase Documentation
-- Featherless AI API Documentation
-- React Navigation Documentation
+**Version**: 2.0  
+**Last Updated**: November 15, 2024  
+**Platform**: React Native (iOS, Android, Web)  
+**Status**: Foundation Complete → Building Core Features
 
 ---
 
-**Document Version**: 2.0  
-**Last Updated**: November 15, 2024  
-**Status**: Phase 1 Complete, Phase 2 In Progress  
-**Platform**: React Native (iOS, Android, Web)
+## 📱 Product Vision
+
+A mobile-first financial literacy app that teaches personal finance through **interactive life simulations**. Users make real financial decisions in simulated scenarios, learn from outcomes, and build practical money management skills.
+
+---
+
+## 🎯 Core Value Proposition
+
+**"Learn personal finance by living it, not just reading about it"**
+
+- **Interactive**: Make decisions, see consequences immediately
+- **Practical**: Real-world scenarios users will actually face
+- **Guided**: AI-powered advice when you need it
+- **Mobile**: Learn anywhere, anytime
+
+---
+
+## 📊 Current State
+
+### ✅ What's Built (Foundation)
+
+**Tech Stack**:
+- React Native with Expo
+- TypeScript
+- React Native Paper (UI)
+- React Navigation (Bottom Tabs + Stack)
+- Supabase client configured (not connected yet)
+
+**Screens Implemented**:
+1. **Dashboard** - Progress overview and quick actions
+2. **Simulation** - Life simulation launcher
+3. **Concepts** - Financial topics library
+4. **Profile** - User settings
+
+**What Works**:
+- ✅ Full navigation structure
+- ✅ Bottom tab navigation
+- ✅ Clean UI with Material Design
+- ✅ Runs on iOS, Android, and Web
+- ✅ Development environment setup
+
+**What's NOT Working**:
+- ❌ No actual simulations yet (just placeholder)
+- ❌ No real concepts/content
+- ❌ No database connection
+- ❌ No AI integration
+- ❌ No user data persistence
+
+---
+
+## 🚀 Development Roadmap
+
+### **PHASE 1: Core Simulation Engine** ⏳ NEXT
+**Goal**: Build the simulation system that makes the app useful
+
+#### Step 1.1: Design Simulation Data Structure
+```typescript
+type Simulation = {
+  id: string;
+  title: string;
+  currentAge: number;
+  currentSavings: number;
+  currentIncome: number;
+  currentExpenses: number;
+  decisions: Decision[];
+  stage: 'student' | 'early-career' | 'mid-career' | 'retirement';
+  status: 'active' | 'completed';
+}
+
+type Decision = {
+  id: string;
+  prompt: string;
+  options: Option[];
+  timestamp: Date;
+  chosen: Option | null;
+}
+
+type Option = {
+  id: string;
+  text: string;
+  financialImpact: {
+    savings?: number;
+    income?: number;
+    expenses?: number;
+  };
+  outcome: string;
+}
+```
+
+**Files to Create**:
+- `src/types/simulation.ts` - Type definitions
+- `src/hooks/useSimulation.ts` - Simulation state management
+- `src/data/scenarios.ts` - Pre-built scenarios
+
+**Deliverable**: Data structures defined and tested
+
+---
+
+#### Step 1.2: Build Simulation State Management
+**What to Build**:
+- React Context for simulation state
+- Functions to progress simulation
+- Decision tracking
+- Financial calculations
+
+**Files to Create**:
+- `src/contexts/SimulationContext.tsx`
+- `src/utils/financialCalculations.ts`
+
+**Deliverable**: Working simulation state that can track decisions and calculate outcomes
+
+---
+
+#### Step 1.3: Create Simulation Flow UI
+**What to Build**:
+- Start simulation screen
+- Decision prompt screen
+- Outcome display screen
+- Financial dashboard widget
+- Progress indicator
+
+**Files to Create**:
+- `src/screens/SimulationFlowScreen.tsx`
+- `src/screens/SimulationResultScreen.tsx`
+- `src/components/DecisionCard.tsx`
+- `src/components/FinancialDashboard.tsx`
+
+**Navigation Updates**:
+- Add simulation flow to navigation stack
+- Handle simulation completion flow
+
+**Deliverable**: User can start simulation, make decisions, see outcomes
+
+---
+
+#### Step 1.4: Add Sample Scenarios
+**What to Build**:
+- 3-5 pre-built scenarios:
+  1. **First Job** - budgeting, savings, lifestyle choices
+  2. **Emergency Fund** - unexpected expenses, insurance
+  3. **Debt Management** - student loans, credit cards
+  4. **First Investment** - stocks, 401k, compound interest
+  5. **Big Purchase** - house, car, rent vs buy
+
+**Files to Update**:
+- `src/data/scenarios.ts` - Add complete scenarios with decisions
+
+**Deliverable**: Users can play through complete financial simulations
+
+---
+
+#### Step 1.5: Local Data Persistence
+**What to Build**:
+- Save simulations to AsyncStorage
+- Load previous simulations
+- Track completion history
+
+**Packages to Install**:
+```bash
+# Already installed: @react-native-async-storage/async-storage
+```
+
+**Files to Create**:
+- `src/lib/storage.ts` - Storage utilities
+
+**Deliverable**: Simulations persist between app restarts
+
+---
+
+### **PHASE 2: Content Library** 
+**Goal**: Add educational content users can learn from
+
+#### Step 2.1: Concept Data Structure
+```typescript
+type Concept = {
+  id: string;
+  title: string;
+  category: 'budgeting' | 'saving' | 'credit' | 'investing' | 'debt';
+  difficulty: 'beginner' | 'intermediate' | 'advanced';
+  content: {
+    summary: string;
+    explanation: string;
+    examples: string[];
+    keyTakeaways: string[];
+  };
+  quiz: QuizQuestion[];
+}
+```
+
+**Deliverable**: Concept type definitions
+
+---
+
+#### Step 2.2: Build Concept Library
+**What to Build**:
+- 15-20 financial concepts with full content
+- Organized by category
+- Difficulty progression
+
+**Files to Create**:
+- `src/data/concepts.ts` - All concept content
+
+**Topics to Cover**:
+- **Budgeting**: 50/30/20 rule, zero-based budget
+- **Saving**: Emergency fund, savings goals
+- **Credit**: Credit scores, credit cards
+- **Debt**: Good vs bad debt, payoff strategies
+- **Investing**: Compound interest, diversification
+- **Insurance**: Types, when you need it
+- **Taxes**: Tax brackets, deductions
+
+**Deliverable**: Complete concept library
+
+---
+
+#### Step 2.3: Concept Learning UI
+**What to Build**:
+- Concept detail screen
+- Reading progress tracker
+- Quiz interface
+- Results feedback
+
+**Files to Create**:
+- `src/screens/ConceptDetailScreen.tsx`
+- `src/screens/ConceptQuizScreen.tsx`
+- `src/components/QuizQuestion.tsx`
+
+**Deliverable**: Users can read concepts and take quizzes
+
+---
+
+### **PHASE 3: AI Integration** 
+**Goal**: Add intelligent guidance using LLM
+
+#### Step 3.1: Featherless AI Setup
+**What to Build**:
+- API client for Featherless
+- Streaming response handler
+- Context management
+
+**Files to Create**:
+- `src/lib/ai.ts` - AI API client
+- `src/hooks/useAI.ts` - AI hook
+
+**API Configuration**:
+```typescript
+const AI_CONFIG = {
+  baseURL: 'https://api.featherless.ai/v1',
+  model: 'meta-llama/Meta-Llama-3.1-70B-Instruct',
+  apiKey: process.env.FEATHERLESS_API_KEY,
+};
+```
+
+**Deliverable**: Working AI client that can generate responses
+
+---
+
+#### Step 3.2: AI-Powered Simulation Advice
+**What to Build**:
+- "Ask AI" button during simulations
+- Context-aware advice based on:
+  - Current financial situation
+  - Decision being made
+  - Previous choices
+- Natural language explanations
+
+**Files to Update**:
+- `src/screens/SimulationFlowScreen.tsx`
+- `src/components/AIAdvisor.tsx` (new)
+
+**Deliverable**: Users can get AI advice during simulations
+
+---
+
+#### Step 3.3: AI Chat Interface
+**What to Build**:
+- General financial Q&A chat
+- Conversation history
+- Quick prompts/suggestions
+
+**Files to Create**:
+- `src/screens/ChatScreen.tsx`
+- `src/components/ChatMessage.tsx`
+- `src/components/ChatInput.tsx`
+
+**Add to Navigation**:
+- New tab: "Chat" with chat icon
+
+**Deliverable**: Full chat interface for financial questions
+
+---
+
+### **PHASE 4: Backend & Data** 
+**Goal**: Add cloud database and user accounts
+
+#### Step 4.1: Supabase Database Setup
+**Database Schema**:
+```sql
+-- Users table (Supabase Auth handles this)
+
+-- Simulations
+CREATE TABLE simulations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  title TEXT NOT NULL,
+  data JSONB NOT NULL,
+  completed BOOLEAN DEFAULT FALSE,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Concept Progress
+CREATE TABLE concept_progress (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  concept_id TEXT NOT NULL,
+  completed BOOLEAN DEFAULT FALSE,
+  quiz_score INTEGER,
+  last_accessed TIMESTAMPTZ,
+  UNIQUE(user_id, concept_id)
+);
+
+-- Chat History
+CREATE TABLE chat_messages (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id),
+  role TEXT NOT NULL,
+  content TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
+
+**Tasks**:
+1. Create Supabase project
+2. Run migrations
+3. Set up Row Level Security
+
+**Deliverable**: Database ready for app
+
+---
+
+#### Step 4.2: Connect App to Supabase
+**What to Update**:
+- Replace AsyncStorage with Supabase
+- Sync simulations to cloud
+- Save concept progress
+- Store chat history
+
+**Files to Update**:
+- `src/lib/supabase.ts` - Add CRUD functions
+- `src/contexts/SimulationContext.tsx` - Use Supabase
+- `src/hooks/useAI.ts` - Save chat history
+
+**Deliverable**: All data syncs to cloud
+
+---
+
+#### Step 4.3: Add Authentication (Optional)
+**What to Build**:
+- Email/password auth
+- Anonymous/guest mode
+- Simple login/register screens
+
+**Files to Create**:
+- `src/screens/AuthScreen.tsx`
+- `src/contexts/AuthContext.tsx`
+
+**Deliverable**: Users can create accounts (but guest mode still works)
+
+---
+
+### **PHASE 5: Polish & Launch** 
+**Goal**: Make it production-ready
+
+#### Step 5.1: Enhance UI/UX
+- Add animations and transitions
+- Improve loading states
+- Add empty states
+- Better error handling
+- Accessibility improvements
+
+#### Step 5.2: Testing
+- Test all simulation scenarios
+- Test on iOS and Android devices
+- Performance optimization
+- Bug fixes
+
+#### Step 5.3: App Store Preparation
+- Create app icon
+- Design splash screen
+- Write app descriptions
+- Take screenshots
+- Create privacy policy
+
+#### Step 5.4: Launch
+- Submit to Apple App Store
+- Submit to Google Play Store
+- Create landing page
+- Announce launch
+
+---
+
+## 🎯 Success Metrics
+
+### Phase 1 Success Criteria:
+- Users can complete a full simulation
+- Decisions impact financial outcomes
+- Results are clear and educational
+
+### Phase 2 Success Criteria:
+- 15+ concepts available
+- Users can read and quiz themselves
+- Progression feels natural
+
+### Phase 3 Success Criteria:
+- AI provides helpful advice
+- Response time < 3 seconds
+- Advice is contextually relevant
+
+### Overall Launch Goals:
+- 1000+ downloads in first month
+- 4+ star rating
+- 50%+ completion rate on first simulation
+
+---
+
+## 📐 Technical Architecture
+
+```
+App Structure:
+├── src/
+│   ├── screens/          # All app screens
+│   ├── components/       # Reusable UI components
+│   ├── navigation/       # Navigation config
+│   ├── contexts/         # State management
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utilities (API, storage, etc)
+│   ├── types/            # TypeScript types
+│   └── data/             # Static content (scenarios, concepts)
+```
+
+**Data Flow**:
+1. User opens app → Loads from AsyncStorage/Supabase
+2. Starts simulation → SimulationContext manages state
+3. Makes decisions → Calculations update finances
+4. Needs help → AI generates contextual advice
+5. Completes → Results saved locally + cloud
+
+---
+
+## 🚦 Development Priority
+
+**NOW (Phase 1)**: Focus 100% on simulation engine
+- This is the core value proposition
+- Everything else builds on this
+- Must be fun and educational
+
+**NEXT (Phase 2)**: Add concepts
+- Complements simulations
+- Users can learn deeper
+
+**THEN (Phase 3)**: Add AI
+- Makes experience personalized
+- Premium feature
+
+**FINALLY (Phase 4-5)**: Backend & polish
+- Needed for long-term
+- Not critical for MVP
+
+---
+
+## 💡 Key Design Principles
+
+1. **Mobile-First**: Every feature designed for phone use
+2. **Instant Gratification**: See results immediately
+3. **No Reading Walls**: Keep content bite-sized
+4. **Safe to Fail**: Simulations are practice, not judgment
+5. **Progressive Complexity**: Start simple, get deeper
+
+---
+
+## 🛠️ Development Guidelines
+
+### Before Starting Each Phase:
+1. Read this PRD section
+2. Create detailed task list
+3. Estimate time (be realistic)
+4. Test on real device
+
+### During Development:
+1. Commit often with clear messages
+2. Test on iOS and Android
+3. Keep performance in mind
+4. Document complex logic
+
+### After Completing Phase:
+1. Full testing pass
+2. Get feedback from users
+3. Update this PRD
+4. Plan next phase
+
+---
+
+## 📞 Getting Started with Phase 1
+
+### Immediate Next Steps:
+
+1. **Create type definitions** (`src/types/simulation.ts`)
+2. **Build context** (`src/contexts/SimulationContext.tsx`)
+3. **Create first scenario** (First Job scenario)
+4. **Build decision UI** (Simple but functional)
+5. **Test complete flow** (Start → Decisions → Results)
+
+### Estimated Timeline:
+- **Phase 1**: 1-2 weeks
+- **Phase 2**: 1 week
+- **Phase 3**: 1 week
+- **Phase 4**: 1 week
+- **Phase 5**: 1 week
+
+**Total to MVP**: ~5-6 weeks of focused development
+
+---
+
+## 🎓 Example Simulation Flow
+
+**Scenario: First Job**
+
+1. **Start Screen**:
+   - "You just graduated college and got your first job!"
+   - Starting salary: $50,000/year
+   - Savings: $1,000
+   - Student loans: $25,000
+
+2. **Decision 1 - Housing**:
+   - Rent cheap apartment ($800/mo) → Save more money
+   - Rent nice apartment ($1,200/mo) → Better lifestyle, less savings
+   - Live with roommates ($500/mo) → Maximum savings
+
+3. **Outcome**:
+   - Show monthly budget breakdown
+   - Explain impact of choice
+   - Show running totals
+
+4. **Decision 2 - Savings**:
+   - Save 20% of income → Build emergency fund
+   - Save 10% of income → Balanced approach
+   - Save nothing → Live paycheck to paycheck
+
+5. **Random Event**:
+   - Car breaks down ($1,000 repair)
+   - Do you have emergency fund? Consequences differ
+
+6. **Final Results**:
+   - After 12 months: Show net worth change
+   - Lessons learned
+   - Recommended concepts to study
+
+---
+
+## 📚 Appendix
+
+### Useful Resources:
+- [React Native Docs](https://reactnative.dev/)
+- [Expo Docs](https://docs.expo.dev/)
+- [Supabase Docs](https://supabase.com/docs)
+- [Featherless AI Docs](https://featherless.ai/docs)
+
+### Financial Content Sources:
+- r/personalfinance wiki
+- NerdWallet articles
+- Investopedia
+- The Balance
+
+---
+
+**Ready to build?** Start with Phase 1, Step 1.1 → Create simulation types! 🚀

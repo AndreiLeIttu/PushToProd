@@ -1,19 +1,82 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DashboardScreen from '../screens/DashboardScreen';
 import SimulationScreen from '../screens/SimulationScreen';
+import SimulationFlowScreen from '../screens/SimulationFlowScreen';
+import SimulationResultScreen from '../screens/SimulationResultScreen';
 import ConceptsScreen from '../screens/ConceptsScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import ConceptDetailScreen from '../screens/ConceptDetailScreen';
+import ConceptQuizScreen from '../screens/ConceptQuizScreen';
 
 export type MainTabParamList = {
   Dashboard: undefined;
+  SimulationTab: undefined;
+  ConceptsTab: undefined;
+};
+
+export type SimulationStackParamList = {
   Simulation: undefined;
+  SimulationFlow: undefined;
+  SimulationResult: undefined;
+};
+
+export type ConceptStackParamList = {
   Concepts: undefined;
-  Profile: undefined;
+  ConceptDetail: { concept: any };
+  ConceptQuiz: { concept: any };
 };
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
+const SimulationStack = createNativeStackNavigator<SimulationStackParamList>();
+const ConceptStack = createNativeStackNavigator<ConceptStackParamList>();
+
+// Simulation Stack Navigator
+function SimulationNavigator() {
+  return (
+    <SimulationStack.Navigator>
+      <SimulationStack.Screen
+        name="Simulation"
+        component={SimulationScreen}
+        options={{ title: 'Simulations' }}
+      />
+      <SimulationStack.Screen
+        name="SimulationFlow"
+        component={SimulationFlowScreen}
+        options={{ title: 'Life Simulation' }}
+      />
+      <SimulationStack.Screen
+        name="SimulationResult"
+        component={SimulationResultScreen}
+        options={{ title: 'Results', headerBackVisible: false }}
+      />
+    </SimulationStack.Navigator>
+  );
+}
+
+// Concept Stack Navigator
+function ConceptNavigator() {
+  return (
+    <ConceptStack.Navigator>
+      <ConceptStack.Screen
+        name="Concepts"
+        component={ConceptsScreen}
+        options={{ title: 'Financial Concepts' }}
+      />
+      <ConceptStack.Screen
+        name="ConceptDetail"
+        component={ConceptDetailScreen}
+        options={{ title: 'Learn' }}
+      />
+      <ConceptStack.Screen
+        name="ConceptQuiz"
+        component={ConceptQuizScreen}
+        options={{ title: 'Quiz' }}
+      />
+    </ConceptStack.Navigator>
+  );
+}
 
 export default function MainNavigator() {
   return (
@@ -26,14 +89,11 @@ export default function MainNavigator() {
             case 'Dashboard':
               iconName = focused ? 'view-dashboard' : 'view-dashboard-outline';
               break;
-            case 'Simulation':
+            case 'SimulationTab':
               iconName = focused ? 'account-circle' : 'account-circle-outline';
               break;
-            case 'Concepts':
+            case 'ConceptsTab':
               iconName = focused ? 'book-open-page-variant' : 'book-open-page-variant-outline';
-              break;
-            case 'Profile':
-              iconName = focused ? 'account' : 'account-outline';
               break;
             default:
               iconName = 'circle';
@@ -43,12 +103,24 @@ export default function MainNavigator() {
         },
         tabBarActiveTintColor: '#6200ee',
         tabBarInactiveTintColor: 'gray',
+        headerShown: false,
       })}
     >
-      <Tab.Screen name="Dashboard" component={DashboardScreen} />
-      <Tab.Screen name="Simulation" component={SimulationScreen} />
-      <Tab.Screen name="Concepts" component={ConceptsScreen} />
-      <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{ title: 'Dashboard' }}
+      />
+      <Tab.Screen
+        name="SimulationTab"
+        component={SimulationNavigator}
+        options={{ title: 'Simulation' }}
+      />
+      <Tab.Screen
+        name="ConceptsTab"
+        component={ConceptNavigator}
+        options={{ title: 'Concepts' }}
+      />
     </Tab.Navigator>
   );
 }
