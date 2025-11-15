@@ -1,6 +1,11 @@
 import { Scenario, NextScenarioParams, AnswerQuality } from '../types';
 
-const API_BASE_URL = "https://backendpushtoprod.onrender.com";
+//const API_BASE_URL = "https://backendpushtoprod.onrender.com";
+// Backend API base URL - update this to match your backend URL
+// For local development: http://localhost:8000
+// For production: update with your deployed backend URL
+// You can also set REACT_APP_API_URL environment variable
+const API_BASE_URL = 'http://localhost:8000';
 
 type BackendLevel = 'beginner' | 'intermediate' | 'advanced';
 type FrontendLiteracyLevel = 'beginner' | 'medium' | 'advanced';
