@@ -221,13 +221,11 @@ const ALL_CONCEPTS: Concept[] = [
 
 interface ConceptsLibraryProps {
   onBack?: () => void;
-  studiedConcepts: string[];
-  onConceptStudied: (conceptId: string) => void;
   selectedConceptId?: string | null;
   onConceptSelected?: () => void;
 }
 
-const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, studiedConcepts, onConceptStudied, selectedConceptId, onConceptSelected }) => {
+const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, selectedConceptId, onConceptSelected }) => {
   const [selectedConcept, setSelectedConcept] = useState<Concept | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
@@ -262,9 +260,6 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, studiedConcep
     setShowQuiz(false);
     setSelectedQuizAnswer(null);
     setShowQuizResult(false);
-    if (!studiedConcepts.includes(concept.id)) {
-      onConceptStudied(concept.id);
-    }
   };
 
   const handleShowQuiz = () => {

@@ -232,8 +232,6 @@ const App: React.FC = () => {
               setGameState('start');
               setSelectedConceptId(null);
             }}
-            studiedConcepts={studiedConcepts}
-            onConceptStudied={handleConceptStudied}
             selectedConceptId={selectedConceptId}
             onConceptSelected={() => setSelectedConceptId(null)}
           />
@@ -283,7 +281,6 @@ const App: React.FC = () => {
               setGameState('concepts');
             }}
             onPlayAgain={() => {
-              setStudiedConcepts([]);
               setGameState('start');
             }} 
           />
@@ -305,7 +302,7 @@ const App: React.FC = () => {
     }
   };
 
-  const showNavBar = gameState === 'start' || gameState === 'concepts' || gameState === 'playing';
+  const showNavBar = gameState === 'start' || gameState === 'concepts' || gameState === 'playing' || gameState == 'end';
   const getCurrentScreen = () => {
     if (gameState === 'concepts') return 'concepts';
     if (gameState === 'playing') return 'start'; // Show as "Home" during game

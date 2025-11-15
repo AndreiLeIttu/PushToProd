@@ -239,27 +239,16 @@ export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
   }>;
 } => {
   const conceptNameMap: Record<string, string> = {
-    'investing': 'Investing',
-    'life_insurance': 'Insurance',
-    'annuities': 'Retirement Planning',
-    'housing': 'Budgeting',
-    'retirement_savings': 'Retirement Planning',
-    'debt_management': 'Debt',
-    'diversification_of_risk': 'Investing',
-    'time_value_of_money': 'Saving',
-    'inflation': 'Saving',
-    'interest': 'Credit',
-  };
-
-  const conceptIdMap: Record<string, string> = {
-    'Investing': 'investing',
-    'Insurance': 'insurance',
-    'Retirement Planning': 'retirement',
-    'Budgeting': 'budgeting',
-    'Debt': 'debt',
-    'Saving': 'saving',
-    'Credit': 'credit',
-    'Taxes': 'taxes',
+    'investing': 'Investing Basics',
+    'life_insurance': 'Credit',
+    'annuities': 'Credit',
+    'housing': 'Simple Budgeting',
+    'retirement_savings': 'Savings',
+    'debt_management': 'Loans & Dept',
+    'diversification_of_risk': 'Risk & Diversification',
+    'time_value_of_money': 'Short-term vs Long-term',
+    'inflation': 'Income',
+    'interest': 'Banks & Account',
   };
 
   const conceptsToReview = backendSummary.weakest_points.map(([name, score]) => {
