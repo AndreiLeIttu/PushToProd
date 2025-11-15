@@ -159,21 +159,33 @@ const EndScreen: React.FC<EndScreenProps> = ({ summary, grade, wrongConcepts, on
         <Text style={styles.headerSummary}>{summary.overallSummary}</Text>
       </Animated.View>
 
-      {wrongConcepts.length > 0 && (
+      {(wrongConcepts.length > 0 || summary.conceptsToReview.length > 0) && (
         <View style={styles.conceptsSection}>
           <Text style={styles.sectionTitle}>Concepts to Review</Text>
           <Text style={styles.sectionSubtitle}>
             You struggled with these concepts. Tap to learn more.
           </Text>
           <View style={styles.conceptsList}>
-            {wrongConcepts.map((conceptName, index) => (
+            {/* Show concepts from backend summary first */}
+            {summary.conceptsToReview.map((concept, index) => (
               <WrongConceptCard
-                key={conceptName}
-                conceptName={conceptName}
+                key={`summary-${concept.concept}-${index}`}
+                conceptName={concept.concept}
                 index={index}
-                onPress={() => onConceptPress(conceptName)}
+                onPress={() => onConceptPress(concept.concept)}
               />
             ))}
+            {/* Then show wrong concepts that aren't already in summary */}
+            {wrongConcepts
+              .filter(concept => !summary.conceptsToReview.some(c => c.concept === concept))
+              .map((conceptName, index) => (
+                <WrongConceptCard
+                  key={`wrong-${conceptName}-${index}`}
+                  conceptName={conceptName}
+                  index={summary.conceptsToReview.length + index}
+                  onPress={() => onConceptPress(conceptName)}
+                />
+              ))}
           </View>
         </View>
       )}

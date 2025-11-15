@@ -275,18 +275,33 @@ export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
     'interest': 'Credit',
   };
 
-  const conceptsToReview = backendSummary.weakest_points.map(([name, score]) => ({
-    concept: conceptNameMap[name] || name,
-    description: `You scored ${score}/8 in ${conceptNameMap[name] || name}. This is an area to focus on improving.`,
-    question: `What should you know about ${conceptNameMap[name] || name}?`,
-    options: [
-      'It\'s not important',
-      'It\'s a key financial concept worth learning',
-      'You can ignore it',
-    ],
-    correctAnswerIndex: 1,
-    explanation: `Understanding ${conceptNameMap[name] || name} is important for making informed financial decisions.`,
-  }));
+  // Map concept names to concept IDs for navigation
+  const conceptIdMap: Record<string, string> = {
+    'Investing': 'investing',
+    'Insurance': 'insurance',
+    'Retirement Planning': 'retirement',
+    'Budgeting': 'budgeting',
+    'Debt': 'debt',
+    'Saving': 'saving',
+    'Credit': 'credit',
+    'Taxes': 'taxes',
+  };
+
+  const conceptsToReview = backendSummary.weakest_points.map(([name, score]) => {
+    const conceptName = conceptNameMap[name] || name;
+    return {
+      concept: conceptName,
+      description: `You scored ${score}/8 in ${conceptName}. This is an area to focus on improving.`,
+      question: `What should you know about ${conceptName}?`,
+      options: [
+        'It\'s not important',
+        'It\'s a key financial concept worth learning',
+        'You can ignore it',
+      ],
+      correctAnswerIndex: 1,
+      explanation: `Understanding ${conceptName} is important for making informed financial decisions.`,
+    };
+  });
 
   return {
     overallSummary: backendSummary.summary,

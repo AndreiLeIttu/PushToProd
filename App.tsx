@@ -258,7 +258,27 @@ const App: React.FC = () => {
                 'Insurance': 'insurance',
                 'Taxes': 'taxes',
               };
-              const conceptId = conceptMap[conceptName] || conceptName.toLowerCase();
+              // Handle both display names and IDs
+              // Normalize concept name (handle variations)
+              const normalizedName = conceptName.trim();
+              let conceptId = conceptMap[normalizedName];
+              
+              // If not found, try lowercase matching
+              if (!conceptId) {
+                const lowerName = normalizedName.toLowerCase();
+                for (const [key, value] of Object.entries(conceptMap)) {
+                  if (key.toLowerCase() === lowerName) {
+                    conceptId = value;
+                    break;
+                  }
+                }
+              }
+              
+              // Fallback: convert to ID format
+              if (!conceptId) {
+                conceptId = normalizedName.toLowerCase().replace(/\s+/g, '-');
+              }
+              
               setSelectedConceptId(conceptId);
               setGameState('concepts');
             }}
