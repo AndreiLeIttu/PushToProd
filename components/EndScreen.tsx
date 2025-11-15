@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Animated } from 'react-native';
 import { ConceptToReview, GameGrade } from '../types';
 import { TrophyIcon } from './icons/TrophyIcon';

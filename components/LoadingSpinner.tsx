@@ -7,14 +7,12 @@ const LoadingSpinner: React.FC = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
-    // Fade in animation
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 300,
       useNativeDriver: true,
     }).start();
 
-    // Continuous pulse animation
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {

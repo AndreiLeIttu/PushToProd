@@ -1,12 +1,7 @@
 import { Scenario, NextScenarioParams, AnswerQuality } from '../types';
 
-// Backend API base URL - update this to match your backend URL
-// For local development: http://localhost:8000
-// For production: update with your deployed backend URL
-// You can also set REACT_APP_API_URL environment variable
-const API_BASE_URL = (typeof process !== 'undefined' && process.env?.REACT_APP_API_URL) || 'http://localhost:8000';
+const API_BASE_URL = "https://backendpushtoprod.onrender.com";
 
-// Map backend Level enum to frontend LiteracyLevel
 type BackendLevel = 'beginner' | 'intermediate' | 'advanced';
 type FrontendLiteracyLevel = 'beginner' | 'medium' | 'advanced';
 
@@ -19,7 +14,6 @@ const mapLevelToBackend = (level: FrontendLiteracyLevel): BackendLevel => {
   return mapping[level];
 };
 
-// Backend API types
 interface BackendOption {
   id: string;
   content: string;
@@ -44,14 +38,14 @@ interface BackendOption {
       inflation: number;
       interest: number;
     };
-    description?: string;  // Optional - may not be in newer backend version
+    description?: string; 
   };
 }
 
 interface BackendFinancialEvent {
   event_id: string;
   event_content: string;
-  hint?: string;  // Optional hint field
+  hint?: string; 
   options: BackendOption[];
 }
 
@@ -65,7 +59,6 @@ interface BackendSummary {
   summary: string;
 }
 
-// Initialize user profile with questionnaire
 export const initializeProfile = async (age: number, level: FrontendLiteracyLevel) => {
   const backendLevel = mapLevelToBackend(level);
   const response = await fetch(`${API_BASE_URL}/questionnaire`, {
@@ -86,7 +79,6 @@ export const initializeProfile = async (age: number, level: FrontendLiteracyLeve
   return await response.json();
 };
 
-// Start the game life
 export const startLife = async (): Promise<BackendLifeState> => {
   const response = await fetch(`${API_BASE_URL}/start_life`, {
     method: 'POST',
@@ -102,8 +94,8 @@ export const startLife = async (): Promise<BackendLifeState> => {
   return await response.json();
 };
 
-// Get next question/event from backend
 export const fetchNextQuestion = async (): Promise<BackendFinancialEvent> => {
+  console.log("w3fawtgwagnawognwaeognawe[ogbaepogbaegon")
   const response = await fetch(`${API_BASE_URL}/next_question`, {
     method: 'GET',
     headers: {
@@ -118,7 +110,6 @@ export const fetchNextQuestion = async (): Promise<BackendFinancialEvent> => {
   return await response.json();
 };
 
-// Submit answer to backend
 export const submitAnswer = async (
   optionId: string,
   consequence: BackendOption['consequence']
@@ -138,7 +129,6 @@ export const submitAnswer = async (
   return await response.json();
 };
 
-// Get game summary
 export const fetchGameSummary = async (): Promise<BackendSummary> => {
   const response = await fetch(`${API_BASE_URL}/summary`, {
     method: 'GET',
@@ -154,7 +144,6 @@ export const fetchGameSummary = async (): Promise<BackendSummary> => {
   return await response.json();
 };
 
-// Get current profile to access life state
 export const getProfile = async () => {
   const response = await fetch(`${API_BASE_URL}/profile`, {
     method: 'GET',
@@ -170,12 +159,9 @@ export const getProfile = async () => {
   return await response.json();
 };
 
-// Convert backend event to frontend scenario
 export const convertEventToScenario = (event: BackendFinancialEvent): Scenario => {
-  // Extract financial concept from event content or use a default
   const financialConcept = 'Financial Decision';
   
-  // Use hint if available, otherwise use event_content as question
   const question = event.hint || event.event_content;
   
   return {
@@ -189,11 +175,7 @@ export const convertEventToScenario = (event: BackendFinancialEvent): Scenario =
   };
 };
 
-// Determine answer quality based on consequence
 const determineAnswerQuality = (consequence: BackendOption['consequence']): AnswerQuality => {
-  // If money delta is positive and knowledge increases, it's likely a good answer
-  // If money delta is negative and knowledge decreases, it's likely a bad answer
-  // Otherwise, it's neutral
   
   const knowledgeSum = Object.values(consequence.knowledge_delta).reduce((sum, val) => sum + val, 0);
   const traitsSum = Object.values(consequence.traits_delta).reduce((sum, val) => sum + val, 0);
@@ -206,16 +188,13 @@ const determineAnswerQuality = (consequence: BackendOption['consequence']): Answ
   return 'neutral';
 };
 
-// Store current event to track which option was selected
 let currentEvent: BackendFinancialEvent | null = null;
 
-// Fetch initial scenario (converts backend event to frontend scenario)
 export const fetchInitialScenario = async (): Promise<Scenario> => {
   currentEvent = await fetchNextQuestion();
   return convertEventToScenario(currentEvent);
 };
 
-// Fetch next scenario with answer analysis
 export const fetchNextScenario = async (
   params: NextScenarioParams
 ): Promise<{ 
@@ -223,29 +202,21 @@ export const fetchNextScenario = async (
   analysis: { quality: AnswerQuality };
   lifeState: BackendLifeState;
 }> => {
-  // This is called after an answer is submitted, so we need to:
-  // 1. Find the selected option from the current event
-  // 2. Submit the answer
-  // 3. Get the next question
   
   if (!currentEvent) {
     throw new Error('No current event available');
   }
 
-  // Find the selected option by matching the answer text
   const selectedOption = currentEvent.options.find(opt => opt.content === params.userAnswer);
   
   if (!selectedOption) {
     throw new Error('Selected option not found');
   }
 
-  // Submit the answer and get updated life state
   const lifeState = await submitAnswer(selectedOption.id, selectedOption.consequence);
   
-  // Determine answer quality
   const quality = determineAnswerQuality(selectedOption.consequence);
   
-  // Get the next question
   currentEvent = await fetchNextQuestion();
   const nextScenario = convertEventToScenario(currentEvent);
   
@@ -256,7 +227,6 @@ export const fetchNextScenario = async (
   };
 };
 
-// Convert backend summary to frontend format
 export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
   overallSummary: string;
   conceptsToReview: Array<{
@@ -268,7 +238,6 @@ export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
     explanation: string;
   }>;
 } => {
-  // Map backend knowledge categories to frontend concept names
   const conceptNameMap: Record<string, string> = {
     'investing': 'Investing',
     'life_insurance': 'Insurance',
@@ -282,7 +251,6 @@ export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
     'interest': 'Credit',
   };
 
-  // Map concept names to concept IDs for navigation
   const conceptIdMap: Record<string, string> = {
     'Investing': 'investing',
     'Insurance': 'insurance',

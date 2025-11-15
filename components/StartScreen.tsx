@@ -14,7 +14,6 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartSimulation, onStudyCon
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
 
   useEffect(() => {
-    // Staggered animations for smooth entrance
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,

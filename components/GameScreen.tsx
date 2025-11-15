@@ -18,7 +18,6 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
   const slideAnim = useRef(new Animated.Value(30)).current;
 
   useEffect(() => {
-    // Animate content in when scenario changes
     fadeAnim.setValue(0);
     slideAnim.setValue(30);
     
@@ -45,7 +44,6 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
   const optionAnimations = scenario.options.map(() => useRef(new Animated.Value(1)).current);
 
   const handleOptionPress = (index: number, optionText: string) => {
-    // Animate selected option
     Animated.sequence([
       Animated.timing(optionAnimations[index], {
         toValue: 0.95,
