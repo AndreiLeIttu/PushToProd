@@ -88,7 +88,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartSimulation, onStudyCon
           },
         ]}
       >
-        <Text style={styles.title}>Welcome to FinQuest!</Text>
+        <Text style={styles.title}>Welcome to Finly!</Text>
         <Text style={styles.description}>
           Navigate life's financial journey, make smart choices, and master the world of money in this interactive simulation.
         </Text>
@@ -123,7 +123,7 @@ const StartScreen: React.FC<StartScreenProps> = ({ onStartSimulation, onStudyCon
             onPressOut={handlePressOut2}
             activeOpacity={0.9}
           >
-            <BookOpenIcon width={20} height={20} color="#10b981" />
+            <BookOpenIcon width={20} height={20} color="#ffffff" />
             <Text style={styles.secondaryButtonText}>Study Concepts</Text>
           </TouchableOpacity>
         </Animated.View>

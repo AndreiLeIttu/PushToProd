@@ -10,8 +10,9 @@ export interface PlayerStats {
 export interface Scenario {
   scenario: string;
   question: string;
-  options: { text: string; outcome: string; }[];
+  options: { text: string; outcome: string; moneyDelta?: number; }[];
   financialConcept: string;
+  hint: string;
 }
 
 export interface ConceptToReview {

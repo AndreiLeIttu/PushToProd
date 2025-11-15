@@ -38,14 +38,14 @@ interface BackendOption {
       inflation: number;
       interest: number;
     };
-    description?: string; 
+    description: string;
   };
 }
 
 interface BackendFinancialEvent {
   event_id: string;
   event_content: string;
-  hint?: string; 
+  hint: string;
   options: BackendOption[];
 }
 
@@ -95,7 +95,6 @@ export const startLife = async (): Promise<BackendLifeState> => {
 };
 
 export const fetchNextQuestion = async (): Promise<BackendFinancialEvent> => {
-  console.log("w3fawtgwagnawognwaeognawe[ogbaepogbaegon")
   const response = await fetch(`${API_BASE_URL}/next_question`, {
     method: 'GET',
     headers: {
@@ -111,7 +110,6 @@ export const fetchNextQuestion = async (): Promise<BackendFinancialEvent> => {
 };
 
 export const submitAnswer = async (
-  optionId: string,
   consequence: BackendOption['consequence']
 ): Promise<BackendLifeState> => {
   const response = await fetch(`${API_BASE_URL}/answer_question`, {
@@ -160,26 +158,23 @@ export const getProfile = async () => {
 };
 
 export const convertEventToScenario = (event: BackendFinancialEvent): Scenario => {
-  const financialConcept = 'Financial Decision';
-  
-  const question = event.hint || event.event_content;
-  
   return {
     scenario: event.event_content,
-    question: question,
+    question: event.event_content,
     options: event.options.map(opt => ({
       text: opt.content,
-      outcome: opt.consequence.description || `You chose: ${opt.content}`,
+      outcome: opt.consequence.description,
+      moneyDelta: opt.consequence.money_delta
     })),
-    financialConcept,
+    financialConcept: "Financial Decision",
+    hint: event.hint,
   };
 };
 
 const determineAnswerQuality = (consequence: BackendOption['consequence']): AnswerQuality => {
-  
   const knowledgeSum = Object.values(consequence.knowledge_delta).reduce((sum, val) => sum + val, 0);
   const traitsSum = Object.values(consequence.traits_delta).reduce((sum, val) => sum + val, 0);
-  
+
   if (consequence.money_delta > 0 && knowledgeSum > 0 && traitsSum > 0) {
     return 'good';
   } else if (consequence.money_delta < 0 && knowledgeSum < 0 && traitsSum < 0) {
@@ -197,29 +192,27 @@ export const fetchInitialScenario = async (): Promise<Scenario> => {
 
 export const fetchNextScenario = async (
   params: NextScenarioParams
-): Promise<{ 
-  scenario: Scenario; 
+): Promise<{
+  scenario: Scenario;
   analysis: { quality: AnswerQuality };
   lifeState: BackendLifeState;
 }> => {
-  
   if (!currentEvent) {
     throw new Error('No current event available');
   }
 
   const selectedOption = currentEvent.options.find(opt => opt.content === params.userAnswer);
-  
+
   if (!selectedOption) {
     throw new Error('Selected option not found');
   }
 
-  const lifeState = await submitAnswer(selectedOption.id, selectedOption.consequence);
-  
+  const lifeState = await submitAnswer(selectedOption.consequence);
   const quality = determineAnswerQuality(selectedOption.consequence);
-  
+
   currentEvent = await fetchNextQuestion();
   const nextScenario = convertEventToScenario(currentEvent);
-  
+
   return {
     scenario: nextScenario,
     analysis: { quality },
@@ -272,4 +265,3 @@ export const convertSummaryToFrontend = (backendSummary: BackendSummary): {
     conceptsToReview,
   };
 };
-
