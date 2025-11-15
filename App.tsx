@@ -1,4 +1,6 @@
 import React, { useState, useCallback } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
 import StartScreen from './components/StartScreen';
 import GameScreen from './components/GameScreen';
 import EndScreen from './components/EndScreen';
@@ -27,8 +29,10 @@ const App: React.FC = () => {
       setGameSummary(null);
       setGameState('playing');
     } catch (e) {
-      setError('Failed to start the game. Please try again.');
+      const errorMessage = e instanceof Error ? e.message : 'Failed to start the game. Please try again.';
+      setError(errorMessage);
       setGameState('error');
+      console.error('Game start error:', e);
     }
   }, []);
 
@@ -70,8 +74,10 @@ const App: React.FC = () => {
           setGameSummary(summary);
           setGameState('end');
         } catch (e) {
-          setError('Failed to generate your game summary. Please try again.');
+          const errorMessage = e instanceof Error ? e.message : 'Failed to generate your game summary. Please try again.';
+          setError(errorMessage);
           setGameState('error');
+          console.error('Game summary error:', e);
         }
         return;
       }
@@ -82,8 +88,10 @@ const App: React.FC = () => {
       setPlayerStats(prev => ({ ...prev, netWorth: prev.netWorth + Math.floor(Math.random() * 5000) - 1000 }));
       setGameState('playing');
     } catch (e) {
-      setError('Failed to load the next part of your story. Please try again.');
+      const errorMessage = e instanceof Error ? e.message : 'Failed to load the next part of your story. Please try again.';
+      setError(errorMessage);
       setGameState('error');
+      console.error('Next scenario error:', e);
     }
   }, [playerStats, scenario, masteredConcepts, unmasteredConcepts]);
 
@@ -99,16 +107,13 @@ const App: React.FC = () => {
         return <LoadingSpinner />;
       case 'error':
         return (
-          <div className="text-center p-8 bg-red-100 border border-red-400 text-red-700 rounded-lg">
-            <h2 className="text-2xl font-bold mb-4">An Error Occurred</h2>
-            <p>{error}</p>
-            <button
-              onClick={startGame}
-              className="mt-6 bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg transition-colors"
-            >
-              Try Again
-            </button>
-          </div>
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorTitle}>An Error Occurred</Text>
+            <Text style={styles.errorText}>{error}</Text>
+            <TouchableOpacity style={styles.errorButton} onPress={startGame}>
+              <Text style={styles.errorButtonText}>Try Again</Text>
+            </TouchableOpacity>
+          </View>
         );
       default:
         return <StartScreen onStart={startGame} />;
@@ -116,12 +121,57 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-100 min-h-screen text-gray-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <SafeAreaView style={styles.container}>
+      <StatusBar style="auto" />
+      <View style={styles.content}>
         {renderContent()}
-      </div>
-    </div>
+      </View>
+    </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f3f4f6',
+  },
+  content: {
+    flex: 1,
+  },
+  errorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 32,
+    backgroundColor: '#fee2e2',
+    margin: 16,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#f87171',
+  },
+  errorTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#991b1b',
+    marginBottom: 16,
+  },
+  errorText: {
+    fontSize: 16,
+    color: '#991b1b',
+    textAlign: 'center',
+    marginBottom: 24,
+  },
+  errorButton: {
+    backgroundColor: '#ef4444',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 8,
+  },
+  errorButtonText: {
+    color: '#ffffff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
 
 export default App;
