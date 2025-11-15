@@ -175,8 +175,6 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
             { opacity: fadeAnim, transform: [{ translateY: slideAnim }] },
           ]}
         >
-          <Text style={styles.scenarioText}>{scenario.scenario}</Text>
-
           <View style={styles.questionRow}>
             <Text style={styles.question}>{scenario.question}</Text>
           </View>
@@ -227,9 +225,9 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
                       <Text
                         style={[
                           styles.moneyDelta,
-                          isSelected && styles.moneyDeltaSelected,
                           isPositive && styles.moneyDeltaPositive,
                           isNegative && styles.moneyDeltaNegative,
+                          isSelected && styles.moneyDeltaSelected,
                         ]}
                       >
                         {isPositive ? "+" : ""}${money.toLocaleString()}
