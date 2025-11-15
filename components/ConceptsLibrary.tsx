@@ -6,8 +6,6 @@ interface Concept {
   id: string;
   name: string;
   description: string;
-  keyPoints: string[];
-  examples: string[];
   quizQuestion: string;
   quizOptions: string[];
   correctAnswerIndex: number;
@@ -16,46 +14,9 @@ interface Concept {
 
 const ALL_CONCEPTS: Concept[] = [
   {
-    id: 'budgeting',
-    name: 'Budgeting',
-    description: 'Budgeting is creating a plan for how you\'ll spend your money. It helps you make sure you have enough for the things you need and want.',
-    keyPoints: [
-      'Track your income and expenses',
-      'Plan your spending before you spend',
-      'Save a portion of your income (10-20%)',
-      'Review and adjust your budget regularly',
-      'Use the 50/30/20 rule: 50% needs, 30% wants, 20% savings'
-    ],
-    examples: [
-      'Creating a monthly budget for rent, food, and entertainment',
-      'Using apps to track your spending',
-      'Setting aside money for emergencies before spending on wants'
-    ],
-    quizQuestion: 'What is the best way to create a budget?',
-    quizOptions: [
-      'Spend money first, then see what\'s left',
-      'Track your income and expenses, then plan your spending',
-      'Don\'t budget at all - just spend when you need things'
-    ],
-    correctAnswerIndex: 1,
-    quizExplanation: 'A good budget starts by understanding how much money you have (income) and how much you spend (expenses). Then you can plan how to allocate your money wisely.'
-  },
-  {
     id: 'saving',
-    name: 'Saving',
-    description: 'Saving means putting money aside for future use. It\'s important to save for emergencies, big purchases, and long-term goals like retirement.',
-    keyPoints: [
-      'Save at least 10-20% of your income',
-      'Build an emergency fund (3-6 months of expenses)',
-      'Save for short-term goals (vacation, car) separately from long-term goals',
-      'Automate your savings',
-      'Pay yourself first - save before spending'
-    ],
-    examples: [
-      'Putting $100 from each paycheck into a savings account',
-      'Saving for a down payment on a house',
-      'Building an emergency fund for unexpected expenses'
-    ],
+    name: 'Savings',
+    description: 'Saving means putting money aside for future use. It\'s important to save for emergencies, big purchases, and long-term goals like retirement. It\'s like saving a few of your favorite snacks now so you\'ll have them when you really want them later.',
     quizQuestion: 'How much of your income should you try to save?',
     quizOptions: [
       'Nothing - spend everything you earn',
@@ -67,20 +28,8 @@ const ALL_CONCEPTS: Concept[] = [
   },
   {
     id: 'investing',
-    name: 'Investing',
+    name: 'Investing Basics',
     description: 'Investing means using your money to buy assets (like stocks, bonds, or real estate) that can grow in value over time. It\'s riskier than saving but can help your money grow faster.',
-    keyPoints: [
-      'Start investing early to benefit from compound interest',
-      'Diversify your investments (don\'t put all eggs in one basket)',
-      'Invest for the long term (5+ years)',
-      'Understand the risk vs. return trade-off',
-      'Consider low-cost index funds for beginners'
-    ],
-    examples: [
-      'Buying stocks in companies you believe in',
-      'Investing in a retirement account (401k, IRA)',
-      'Diversifying across stocks, bonds, and real estate'
-    ],
     quizQuestion: 'What is a key principle of investing?',
     quizOptions: [
       'Put all your money in one investment',
@@ -94,18 +43,6 @@ const ALL_CONCEPTS: Concept[] = [
     id: 'credit',
     name: 'Credit',
     description: 'Credit is the ability to borrow money with a promise to pay it back later. Credit cards and loans are forms of credit. Good credit helps you get better rates on loans.',
-    keyPoints: [
-      'Pay your bills on time to build good credit',
-      'Keep credit card balances low (under 30% of limit)',
-      'Don\'t open too many credit accounts at once',
-      'Check your credit report regularly',
-      'Use credit responsibly - only borrow what you can repay'
-    ],
-    examples: [
-      'Using a credit card and paying the full balance each month',
-      'Taking out a student loan for education',
-      'Building credit history to qualify for a mortgage'
-    ],
     quizQuestion: 'What\'s the best way to use a credit card?',
     quizOptions: [
       'Use it for everything and pay the minimum payment',
@@ -117,20 +54,8 @@ const ALL_CONCEPTS: Concept[] = [
   },
   {
     id: 'debt',
-    name: 'Debt',
-    description: 'Debt is money you owe to someone else. While some debt (like a mortgage) can be useful, too much debt can be stressful and expensive due to interest payments.',
-    keyPoints: [
-      'Avoid high-interest debt (credit cards) when possible',
-      'Pay more than the minimum payment when you can',
-      'Use the debt avalanche or snowball method to pay off debt',
-      'Some debt can be good (mortgage, student loans for education)',
-      'Don\'t take on debt you can\'t afford to repay'
-    ],
-    examples: [
-      'Paying off credit card debt before it accumulates interest',
-      'Taking a mortgage to buy a home (good debt)',
-      'Avoiding payday loans with extremely high interest rates'
-    ],
+    name: 'Loans & Debt',
+    description: 'Loans and debt mean borrowing money now and paying it back later with some extra added. It\'s like borrowing a friend\'s bike—you return it, but you might also clean it or bring them a snack because they helped you out.',
     quizQuestion: 'When is it okay to take on debt?',
     quizOptions: [
       'For anything you want right now',
@@ -141,46 +66,9 @@ const ALL_CONCEPTS: Concept[] = [
     quizExplanation: 'Some debt can be beneficial (like student loans for education or a mortgage for a home), but only if you can afford the payments and it helps you build wealth over time.'
   },
   {
-    id: 'retirement',
-    name: 'Retirement Planning',
-    description: 'Retirement planning involves saving and investing money now so you can maintain your lifestyle when you stop working. The earlier you start, the easier it is.',
-    keyPoints: [
-      'Start saving for retirement as early as possible',
-      'Take advantage of employer 401(k) matching',
-      'Use retirement accounts (401k, IRA) for tax benefits',
-      'Aim to save 15-20% of income for retirement',
-      'Consider the 4% rule for retirement withdrawals'
-    ],
-    examples: [
-      'Contributing to a 401(k) with employer matching',
-      'Opening an IRA for additional retirement savings',
-      'Calculating how much you need to retire comfortably'
-    ],
-    quizQuestion: 'When should you start saving for retirement?',
-    quizOptions: [
-      'Wait until you\'re older and making more money',
-      'Start as early as possible, even with small amounts',
-      'Only when you have extra money left over'
-    ],
-    correctAnswerIndex: 1,
-    quizExplanation: 'Starting early is crucial because of compound interest. Even small amounts saved in your 20s can grow significantly more than larger amounts saved later in life.'
-  },
-  {
     id: 'insurance',
     name: 'Insurance',
     description: 'Insurance protects you from financial loss by transferring risk to an insurance company. You pay premiums in exchange for coverage.',
-    keyPoints: [
-      'Health insurance protects against medical costs',
-      'Auto insurance is required by law in most places',
-      'Renters/homeowners insurance protects your belongings',
-      'Life insurance provides for your family if you die',
-      'Only buy insurance you actually need'
-    ],
-    examples: [
-      'Having health insurance to cover medical emergencies',
-      'Car insurance to protect against accidents',
-      'Renters insurance to cover stolen or damaged belongings'
-    ],
     quizQuestion: 'What is the main purpose of insurance?',
     quizOptions: [
       'To make money by investing premiums',
@@ -192,28 +80,142 @@ const ALL_CONCEPTS: Concept[] = [
   },
   {
     id: 'taxes',
-    name: 'Taxes',
-    description: 'Taxes are mandatory payments to the government. Understanding taxes helps you plan your finances and take advantage of deductions and credits.',
-    keyPoints: [
-      'File your taxes on time (usually April 15)',
-      'Keep receipts for deductible expenses',
-      'Understand the difference between deductions and credits',
-      'Consider using tax-advantaged accounts (401k, IRA)',
-      'Get help from a tax professional if needed'
-    ],
-    examples: [
-      'Claiming student loan interest as a deduction',
-      'Contributing to a 401(k) to reduce taxable income',
-      'Filing taxes correctly to avoid penalties'
-    ],
+    name: 'Income, Paychecks & Taxes',
+    description: 'Income is the money you earn, and taxes are small parts taken by the government to pay for things like schools, roads, and hospitals. It\'s like earning a pizza and giving a few slices to help keep the home running—like paying for Wi-Fi or electricity.',
     quizQuestion: 'What is a benefit of contributing to a 401(k) retirement account?',
     quizOptions: [
       'You never have to pay taxes',
-      'It reduces your taxable income and grows tax-deferred',
+      'It reduces your taxable income',
       'You can withdraw money anytime without penalty'
     ],
     correctAnswerIndex: 1,
     quizExplanation: '401(k) contributions reduce your taxable income now, and the money grows tax-deferred until you withdraw it in retirement.'
+  },
+  {
+    id: "charity",
+    name: "Sharing/Charity",
+    description: "Sharing or giving to charity means using a bit of your money to help others or support a cause you care about. It's like sharing a pencil or snack with a friend who forgot theirs - it costs you little, but means a lot to them.",
+    quizQuestion: 'Why is donating a small part of your money to charity considered a good financial habit?',
+    quizOptions: [
+      'Because it helps you earn extra pocket money',
+      'Because it teaches you to budget and think about others',
+      'Because it means you never have to save money',
+      'Because charities will give the money back later',
+    ],
+    correctAnswerIndex: 1,
+    quizExplanation: 'Sharing even a small amount reminds you to be kind, responsible, and thoughtful about how you use your money.'
+  },
+  {
+    id: "opportunity-cost",
+    name: "Opportunity cost",
+    description: "Opportunity cost is what you give up when you choose one thing instead of another. It's like using your only free hour to watch a show—doing that means you miss out on gaming or hanging out with friends.",
+    quizQuestion: 'What is an opportunity cost?',
+    quizOptions: [
+      'The money you hide in your room',
+      'The reward you get for doing chores',
+      'What you give up when you choose one thing instead of another',
+      'A special discount at a store',
+    ],
+    correctAnswerIndex: 2,
+    quizExplanation: 'Opportunity cost means choosing one thing and giving up something else — it reminds you that every choice has a trade-off.'
+  },
+  {
+    id: "scarcity",
+    name: "Scarcity",
+    description: "Scarcity means something is limited, and limited things usually become more valuable. It's like a limited-edition hoodie drop—because there aren't many available, everyone wants one and the price goes up.",
+    correctAnswerIndex: 1,
+    quizExplanation: 'It shows scarcity because the bakery has limited resources and can\'t make endless cupcakes, even when more people want them',
+    quizOptions: [
+      'There is no scarcity because some cupcakes are left',
+      'Scarcity, because the bakery cannot produce unlimited cupcakes even if demand changes',
+      'Scarcity only on days when the cupcakes sell out',
+      'There is never scarcity if people come early'
+    ],
+    quizQuestion: 'A bakery can make only 20 cupcakes each morning. On some days they have leftover cupcakes, and on other days they sell out before noon. What does this situation show?'
+  },
+  {
+    id: "budgeting",
+    name: "Simple Budgeting",
+    description: "Budgeting means planning how to divide your money between needs, wants, and savings. It's like managing your stamina in a game—if you use it all at once, you run out fast, but if you spread it out, you last longer.",
+    correctAnswerIndex: 2,
+    quizExplanation: 'A budget helps you plan your spending and saving so you can reach your goals without running out of money.',
+    quizOptions: [
+      'Spend all your money right away',
+      'Guess how much you might spend',
+      'Plan how to save some money now so you can afford the toy later',
+      'Borrow money from everyone you know',
+    ],
+    quizQuestion: 'You get $10 a week. You want a $12 toy, but you also like buying snacks. What should a good budget help you do?'
+  },
+  {
+    id: "banks-account",
+    name: "Banks & Account",
+    description: "A bank keeps your money safe and helps you store, move, or grow it. It's like having a super-secure digital backpack—you can access it anytime and can't lose it like cash in your pocket.",
+    correctAnswerIndex: 3,
+    quizExplanation: 'Bank accounts are safer than keeping the money yourself, and definitely safer than giving the money to someone else.',
+    quizOptions: [
+      'Put it under your mattress',
+      'Give it to a close friend to keep it for you',
+      'Keep it in a hidden place in your house',
+      'Deposit it inside a bank account'
+    ],
+    quizQuestion: 'You suddenly won a large sum of money. What is a responsible way of keeping the money safe?'
+  },
+  {
+    id: 'interest',
+    name: 'Interest',
+    description: "Interest is the extra money involved when you save or borrow: you earn interest when the bank pays you for saving, and you pay interest when you borrow. Saving is like planting a seed that grows; borrowing is like returning a charger with a snack as thanks.",
+    quizExplanation: 'Interest is the extra money the bank adds to your savings as a reward for keeping your money there.',
+    quizOptions: [
+      'Extra money the bank gives you for keeping your savings there',
+      'A fee you must pay every time you visit the bank',
+      'Money that disappears from your account over time',
+      'A game banks play to decide who gets more money'
+    ],
+    quizQuestion: 'What is interest when you save money in a bank?',
+    correctAnswerIndex: 0
+  },
+  {
+    id: 'short-long-term',
+    name: 'Short-term vs long-term',
+    description: 'Short-term goals are things you want soon, while long-term goals take more time and planning. It\'s like a sprint versus a marathon—a sprint is quick like saving for headphones, while a marathon is slow and steady like saving for a laptop.',
+    quizExplanation: 'A long-term choice is something you save for over time, like the backpack next month.',
+    quizOptions: [
+      'Buying the small toy now',
+      'Saving your money for the backpack',
+      'Spending half and saving half',
+      'Not choosing anything'
+    ],
+    quizQuestion: 'You have $15. You can either buy some sweets today, or save for a new phone that you really want next month. What is the long-term choice?',
+    correctAnswerIndex: 1
+  },
+  {
+    id: 'stocks-bonds-funds',
+    name: 'Stocks, Bonds & Mutual Funds',
+    description: 'Stocks let you own part of a company, bonds let you lend money for a promise of extra repayment, and mutual funds let many people invest together. It\'s like owning a slice of a big pizza (stocks), lending a friend $10 and getting $12 back (bonds), or pooling money with friends to buy a big pizza and sharing it (mutual funds).',
+    quizExplanation: 'Stocks make you part owner of a company, while bonds are loans you give and get back with interest.',
+    quizOptions: [
+      'A stock means you own a small piece of a company, while a bond is money you lend that gets paid back later',
+      'A stock is always safe, and a bond is always risky',
+      'A stock is only for kids, and a bond is only for adults',
+      'A bond lets you control the company you invest in'
+    ],
+    quizQuestion: 'What is the main difference between a stock and a bond?',
+    correctAnswerIndex: 0
+  },
+  {
+    id: 'risks-diversification',
+    name: 'Risks & Diversification',
+    description: 'Risk means your investment can go up or down, and diversification means spreading your money across different things so one mistake doesn\'t ruin everything. It\'s like carrying eggs in multiple baskets—if you drop one, the rest are still safe.',
+    quizExplanation: 'Diversification lowers risk because if one investment loses value, the others can help balance it out.',
+    quizOptions: [
+      'Because it guarantees you will always make more money',
+      'Because different investments grow at the same speed',
+      'Because diversification reduces risk if one investment does badly',
+      'Because it makes your bank account look bigger'
+    ],
+    quizQuestion: 'Why is it safer to spread your money across different investments instead of putting it all in one place?',
+    correctAnswerIndex: 2
   }
 ];
 
@@ -275,24 +277,13 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, studiedConcep
     setShowQuizResult(true);
   };
 
-  const studiedCount = studiedConcepts.length;
-  const totalConcepts = ALL_CONCEPTS.length;
-
   return (
     <View style={styles.container}>
       <Animated.View style={[styles.header, { opacity: fadeAnim }]}>
         <Text style={styles.title}>Financial Concepts Library</Text>
         <Text style={styles.subtitle}>
-          Study these concepts before starting your simulation
+          Study these concepts before/after starting your simulation
         </Text>
-        <View style={styles.progressContainer}>
-          <Text style={styles.progressText}>
-            Studied: {studiedCount} / {totalConcepts}
-          </Text>
-          <View style={styles.progressBar}>
-            <View style={[styles.progressFill, { width: `${(studiedCount / totalConcepts) * 100}%` }]} />
-          </View>
-        </View>
       </Animated.View>
 
       <ScrollView 
@@ -301,13 +292,11 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, studiedConcep
         showsVerticalScrollIndicator={false}
       >
         {ALL_CONCEPTS.map((concept, index) => {
-          const isStudied = studiedConcepts.includes(concept.id);
           return (
             <Animated.View
               key={concept.id}
               style={[
-                styles.conceptCard,
-                isStudied && styles.conceptCardStudied,
+                styles.conceptCard, false,
                 {
                   opacity: fadeAnim,
                   transform: [{
@@ -325,12 +314,9 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, studiedConcep
                 style={styles.conceptCardTouchable}
               >
                 <View style={styles.conceptHeader}>
-                  <BookOpenIcon width={32} height={32} color={isStudied ? "#10b981" : "#06b6d4"} />
+                  <BookOpenIcon width={32} height={32} color={"#06b6d4"} />
                   <View style={styles.conceptHeaderText}>
                     <Text style={styles.conceptName}>{concept.name}</Text>
-                    {isStudied && (
-                      <Text style={styles.studiedBadge}>✓ Studied</Text>
-                    )}
                   </View>
                 </View>
                 <Text style={styles.conceptDescription} numberOfLines={2}>
@@ -383,21 +369,6 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, studiedConcep
                   {!showQuiz ? (
                     <>
                       <Text style={styles.modalDescription}>{selectedConcept.description}</Text>
-                      
-                      <Text style={styles.sectionTitle}>Key Points:</Text>
-                      {selectedConcept.keyPoints.map((point, index) => (
-                        <View key={index} style={styles.keyPointItem}>
-                          <Text style={styles.bullet}>•</Text>
-                          <Text style={styles.keyPointText}>{point}</Text>
-                        </View>
-                      ))}
-                      
-                      <Text style={styles.sectionTitle}>Examples:</Text>
-                      {selectedConcept.examples.map((example, index) => (
-                        <View key={index} style={styles.exampleItem}>
-                          <Text style={styles.exampleText}>{example}</Text>
-                        </View>
-                      ))}
                       
                       <TouchableOpacity
                         style={styles.quizButton}
