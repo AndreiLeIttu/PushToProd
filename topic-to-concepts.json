@@ -1,0 +1,42 @@
+[
+    {
+        "topic": "Investing",
+        "concepts": ["Opportunity cost", "Short-term vs Long-term", "Investing Basics", "Stocks, Bonds & Mutual Funds"]
+    },
+    {
+        "topic": "Life insurance",
+        "concepts": ["Credit", "Short-term vs Long-term"]
+    },
+    {
+        "topic": "Annuities",
+        "concepts": ["Banks & Account", "Credit"]
+    },
+    {
+        "topic": "Housing",
+        "concepts": ["Simple Budgeting", "Credit"]
+    },
+    {
+        "topic": "Retirement savings",
+        "concepts": ["Savings", "Short-term vs Long-term"]
+    },
+    {
+        "topic": "Debt management",
+        "concepts": ["Spending wisely", "Simple Budgeting", "Interest", "Loans & Debt"]
+    },
+    {
+        "topic": "Diversification of risk",
+        "concepts": ["Stocks, Bonds & Mutual Funds", "Investing Basics", "Risk & Diversification"]
+    },
+    {
+        "topic": "Time value of money",
+        "concepts": ["Savings", "Sharing/Charity", "Opportunity cost", "Banks & Account", "Short-term vs Long-term"]
+    },
+    {
+        "topic": "Inflation",
+        "concepts": ["Scarcity", "Credit", "Income, Paychecks & Taxes"]
+    },
+    {
+        "topic": "Interest",
+        "concepts": ["Savings", "Banks & Account", "Interest", "Loans & Debt", "Credit"]
+    }
+]

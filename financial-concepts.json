@@ -1,0 +1,62 @@
+[
+    {
+        "concept": "Savings",
+        "explanation": "Saving means putting money aside instead of spending it right away so you can use it later for something important. It's like saving a few of your favorite snacks now so you'll have them when you really want them later."
+    },
+    {
+        "concept": "Spending wisely",
+        "explanation": "Spending wisely means thinking before you buy and choosing what gives you the best value. It's like using your limited game lives carefully—you don't waste them, you use them smartly to last longer."
+    },
+    {
+        "concept": "Sharing/Charity",
+        "explanation": "Sharing or giving to charity means using a bit of your money to help others or support a cause you care about. It's like sharing a pencil or snack with a friend who forgot theirs—it costs you little, but means a lot to them."
+    },
+    {
+        "concept": "Opportunity cost",
+        "explanation": "Opportunity cost is what you give up when you choose one thing instead of another. It's like using your only free hour to watch a show—doing that means you miss out on gaming or hanging out with friends."
+    },
+    {
+        "concept": "Scarcity",
+        "explanation": "Scarcity means something is limited, and limited things usually become more valuable. It's like a limited-edition hoodie drop—because there aren't many available, everyone wants one and the price goes up."
+    },
+    {
+        "concept": "Simple Budgeting", 
+        "explanation": "Budgeting means planning how to divide your money between needs, wants, and savings. It's like managing your stamina in a game—if you use it all at once, you run out fast, but if you spread it out, you last longer."
+    },
+    {
+        "concept": "Banks & Account", 
+        "explanation": "A bank keeps your money safe and helps you store, move, or grow it. It's like having a super-secure digital backpack—you can access it anytime and can't lose it like cash in your pocket."
+    },
+    {
+        "concept": "Interest", 
+        "explanation": "Interest is the extra money involved when you save or borrow: you earn interest when the bank pays you for saving, and you pay interest when you borrow. Saving is like planting a seed that grows; borrowing is like returning a charger with a snack as thanks."
+    },
+    {
+        "concept": "Short-term vs Long-term", 
+        "explanation": "Short-term goals are things you want soon, while long-term goals take more time and planning. It's like a sprint versus a marathon—a sprint is quick like saving for headphones, while a marathon is slow and steady like saving for a laptop."
+    },
+    {
+        "concept": "Loans & Debt", 
+        "explanation": "Loans and debt mean borrowing money now and paying it back later with some extra added. It's like borrowing a friend's bike—you return it, but you might also clean it or bring them a snack because they helped you out."
+    },
+    {
+        "concept": "Credit", 
+        "explanation": "Credit is your ability to borrow money, and your credit score is like a trust rating that shows how reliable you are at paying it back. It's like your reputation at school—return things on time and people trust you; mess up and trust drops."
+    },
+    {
+        "concept": "Income, Paychecks & Taxes",
+        "explanation": "Income is the money you earn, and taxes are small parts taken by the government to pay for things like schools, roads, and hospitals. It's like earning a pizza and giving a few slices to help keep the home running—like paying for Wi-Fi or electricity."
+    },
+    {
+        "concept": "Investing Basics", 
+        "explanation": "Investing means putting your money into something that can grow over time. It's like planting a money tree—you put in a seed today, water it with patience, and later it grows into something bigger."
+    },
+    {
+        "concept": "Stocks, Bonds & Mutual Funds",
+        "explanation": "Stocks let you own part of a company, bonds let you lend money for a promise of extra repayment, and mutual funds let many people invest together. It's like owning a slice of a big pizza (stocks), lending a friend $10 and getting $12 back (bonds), or pooling money with friends to buy a big pizza and sharing it (mutual funds)."
+    },
+    {
+        "concept": "Risk & Diversification", 
+        "explanation": "Risk means your investment can go up or down, and diversification means spreading your money across different things so one mistake doesn't ruin everything. It's like carrying eggs in multiple baskets—if you drop one, the rest are still safe."
+    }
+]
