@@ -159,7 +159,6 @@ export const getProfile = async () => {
 
 export const convertEventToScenario = (event: BackendFinancialEvent): Scenario => {
   return {
-    scenario: event.event_content,
     question: event.event_content,
     options: event.options.map(opt => ({
       text: opt.content,
