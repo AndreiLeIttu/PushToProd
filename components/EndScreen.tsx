@@ -72,14 +72,11 @@ const EndScreen: React.FC<EndScreenProps> = ({ summary, grade, wrongConcepts, on
     c => !summaryConcepts.includes(c)
   );
 
-  // Optional: remove duplicates inside wrongConcepts themselves
   const dedupedWrongConcepts = [...new Set(uniqueWrongConcepts)];
 
-  // Final unified list (summary first)
-  const finalConceptList = [
-    ...summaryConcepts,
-    ...dedupedWrongConcepts
-  ];
+  const finalConceptList = Array.from(
+    new Set([...summaryConcepts, ...dedupedWrongConcepts])
+  );
 
   useEffect(() => {
     Animated.parallel([
@@ -105,7 +102,7 @@ const EndScreen: React.FC<EndScreenProps> = ({ summary, grade, wrongConcepts, on
 
   const getGradeColor = (letterGrade: string) => {
     switch (letterGrade) {
-      case 'A': return '#022E6B';
+      case 'A': return '#10b981';
       case 'B': return '#3b82f6';
       case 'C': return '#f59e0b';
       case 'D': return '#ef4444';

@@ -5,6 +5,7 @@ import {
 import { Scenario, PlayerStats } from '../types';
 import { UserIcon } from './icons/UserIcon';
 import { WalletIcon } from './icons/WalletIcon';
+import { BellIcon } from "./icons/BellIcon";
 
 interface GameScreenProps {
   scenario: Scenario;
@@ -157,7 +158,7 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
           </View>
           {streak > 0 && (
           <View style={styles.streakContainer}>
-            <Text style={styles.streakText}>🔥 Streak: {streak}</Text>
+            <Text style={styles.streakText}>🔥 {streak}</Text>
           </View>
           )}
           <View style={styles.statItem}>
@@ -181,12 +182,17 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
 
           {!showHint && (
             <TouchableOpacity style={styles.hintButton} onPress={revealHint}>
+            <View style={styles.hintButtonContent}>
+              <BellIcon width={18} height={18} color="#0284c7" />
               <Text style={styles.hintButtonText}>Show Hint</Text>
+            </View>
             </TouchableOpacity>
+
           )}
 
           {showHint && (
-            <Animated.View style={{ opacity: hintOpacity }}>
+            <Animated.View style={[styles.hintContainer, { opacity: hintOpacity }]}>
+              <BellIcon width={20} height={20} color="#0284c7" />
               <Text style={styles.hintText}>{scenario.hint}</Text>
             </Animated.View>
           )}
@@ -280,7 +286,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 12,
   },
-  goodText: { color: "#022E6B" },
+  goodText: { color: "#10b981" },
   neutralText: { color: "#fbbf24" },
   badText: { color: "#ef4444" },
   feedbackBody: {
@@ -312,7 +318,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   moneyDeltaPositive: {
-    color: "#022E6B",
+    color: "#10b981",
   },
   moneyDeltaNegative: {
     color: "#ef4444",
@@ -357,15 +363,14 @@ const styles = StyleSheet.create({
   },
   streakContainer: {
   backgroundColor: "#fef3c7",
-  paddingVertical: 6,
-  paddingHorizontal: 14,
-  borderRadius: 12,
+  paddingVertical: 4,
+  paddingHorizontal: 10,
+  borderRadius: 10,
   alignSelf: "center",
-  marginBottom: 16,
   },
   streakText: {
     color: "#b45309",
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: "700",
   },
   scenarioContainer: {
@@ -403,12 +408,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
   },
-  hintText: {
+  hintButtonContent: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  hintContainer: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    gap: 8,
     backgroundColor: "#f0f9ff",
     padding: 12,
     borderRadius: 8,
-    color: "#0369a1",
     marginBottom: 20,
+  },
+  hintText: {
+    flex: 1,
+    color: "#0369a1",
     fontSize: 15,
   },
   optionsContainer: {

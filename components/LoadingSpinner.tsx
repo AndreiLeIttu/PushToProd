@@ -1,10 +1,23 @@
-import React, { useEffect, useRef } from 'react';
-import { View, Text, ActivityIndicator, StyleSheet, Animated } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Animated } from 'react-native';
+
+const loadingMessages = [
+  "Analyzing your financial profile...",
+  "Preparing personalized life scenarios...",
+  "Selecting your key life decision...",
+  "Simulating possible financial outcomes...",
+  "Tailoring challenge difficulty to your level...",
+  "Generating realistic consequences...",
+  "Setting up your financial journey...",
+  "Calculating your balance...",
+  "Loading smart decision paths...",
+  "Finalizing your story..."
+];
 
 const LoadingSpinner: React.FC = () => {
-  const spinValue = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const [messageIndex, setMessageIndex] = useState(Math.floor(Math.random() * loadingMessages.length));
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
@@ -12,21 +25,31 @@ const LoadingSpinner: React.FC = () => {
       duration: 300,
       useNativeDriver: true,
     }).start();
+  }, []);
 
+  useEffect(() => {
     Animated.loop(
       Animated.sequence([
         Animated.timing(pulseAnim, {
           toValue: 1.2,
-          duration: 1000,
+          duration: 900,
           useNativeDriver: true,
         }),
         Animated.timing(pulseAnim, {
           toValue: 1,
-          duration: 1000,
+          duration: 900,
           useNativeDriver: true,
         }),
       ])
     ).start();
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMessageIndex((prev) => (prev + 1) % loadingMessages.length);
+    }, 2500);
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -34,8 +57,9 @@ const LoadingSpinner: React.FC = () => {
       <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
         <ActivityIndicator size="large" color="#022E6B" />
       </Animated.View>
+
       <Animated.Text style={[styles.text, { opacity: pulseAnim }]}>
-        Building your story...
+        {loadingMessages[messageIndex]}
       </Animated.Text>
     </Animated.View>
   );
@@ -51,10 +75,12 @@ const styles = StyleSheet.create({
     minHeight: 500,
   },
   text: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: '600',
-    color: '#4b5563',
-    marginTop: 16,
+    color: '#374151',
+    marginTop: 20,
+    textAlign: 'center',
+    paddingHorizontal: 20,
   },
 });
 
