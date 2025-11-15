@@ -38,14 +38,14 @@ interface BackendOption {
       inflation: number;
       interest: number;
     };
-    description?: string; 
+    description?: string;
   };
 }
 
 interface BackendFinancialEvent {
   event_id: string;
   event_content: string;
-  hint?: string; 
+  hint?: string;
   options: BackendOption[];
 }
 
@@ -161,25 +161,26 @@ export const getProfile = async () => {
 
 export const convertEventToScenario = (event: BackendFinancialEvent): Scenario => {
   const financialConcept = 'Financial Decision';
-  
+
   const question = event.hint || event.event_content;
-  
+
   return {
     scenario: event.event_content,
     question: question,
     options: event.options.map(opt => ({
       text: opt.content,
       outcome: opt.consequence.description || `You chose: ${opt.content}`,
+      moneyDelta: opt.consequence.money_delta
     })),
     financialConcept,
   };
 };
 
 const determineAnswerQuality = (consequence: BackendOption['consequence']): AnswerQuality => {
-  
+
   const knowledgeSum = Object.values(consequence.knowledge_delta).reduce((sum, val) => sum + val, 0);
   const traitsSum = Object.values(consequence.traits_delta).reduce((sum, val) => sum + val, 0);
-  
+
   if (consequence.money_delta > 0 && knowledgeSum > 0 && traitsSum > 0) {
     return 'good';
   } else if (consequence.money_delta < 0 && knowledgeSum < 0 && traitsSum < 0) {
@@ -197,29 +198,29 @@ export const fetchInitialScenario = async (): Promise<Scenario> => {
 
 export const fetchNextScenario = async (
   params: NextScenarioParams
-): Promise<{ 
-  scenario: Scenario; 
+): Promise<{
+  scenario: Scenario;
   analysis: { quality: AnswerQuality };
   lifeState: BackendLifeState;
 }> => {
-  
+
   if (!currentEvent) {
     throw new Error('No current event available');
   }
 
   const selectedOption = currentEvent.options.find(opt => opt.content === params.userAnswer);
-  
+
   if (!selectedOption) {
     throw new Error('Selected option not found');
   }
 
   const lifeState = await submitAnswer(selectedOption.id, selectedOption.consequence);
-  
+
   const quality = determineAnswerQuality(selectedOption.consequence);
-  
+
   currentEvent = await fetchNextQuestion();
   const nextScenario = convertEventToScenario(currentEvent);
-  
+
   return {
     scenario: nextScenario,
     analysis: { quality },

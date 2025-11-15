@@ -108,6 +108,8 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
           {scenario.options.map((option, index) => {
             const isSelected = selectedOption === option.text;
             const buttonScale = optionAnimations[index];
+            const isPositive = option.moneyDelta !== undefined && option.moneyDelta > 0;
+            const isNegative = option.moneyDelta !== undefined && option.moneyDelta < 0;
             
             return (
               <Animated.View
@@ -124,12 +126,24 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
                   ]}
                   activeOpacity={0.7}
                 >
-                  <Text style={[
-                    styles.optionText,
-                    isSelected && styles.optionTextSelected
-                  ]}>
-                    {option.text}
-                  </Text>
+                  <View style={styles.optionContent}>
+                    <Text style={[
+                      styles.optionText,
+                      isSelected && styles.optionTextSelected
+                    ]}>
+                      {option.text}
+                    </Text>
+                    {option.moneyDelta !== undefined && (
+                      <Text style={[
+                        styles.moneyDelta,
+                        isSelected && styles.moneyDeltaSelected,
+                        isPositive && styles.moneyDeltaPositive,
+                        isNegative && styles.moneyDeltaNegative,
+                      ]}>
+                        {isPositive ? '+' : ''} ${option.moneyDelta.toLocaleString()}
+                      </Text>
+                    )}
+                  </View>
                 </TouchableOpacity>
               </Animated.View>
             );
@@ -152,6 +166,26 @@ const GameScreen: React.FC<GameScreenProps> = ({ scenario, playerStats, onAnswer
 };
 
 const styles = StyleSheet.create({
+  optionContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  moneyDelta: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginLeft: 12,
+  },
+  moneyDeltaPositive: {
+    color: '#10b981',
+  },
+  moneyDeltaNegative: {
+    color: '#ef4444',
+  },
+  moneyDeltaSelected: {
+    color: '#ffffff',
+  },
+
   container: {
     flex: 1,
     backgroundColor: '#f9fafb',
