@@ -44,13 +44,14 @@ interface BackendOption {
       inflation: number;
       interest: number;
     };
-    description: string;
+    description?: string;  // Optional - may not be in newer backend version
   };
 }
 
 interface BackendFinancialEvent {
   event_id: string;
   event_content: string;
+  hint?: string;  // Optional hint field
   options: BackendOption[];
 }
 
@@ -67,11 +68,15 @@ interface BackendSummary {
 // Initialize user profile with questionnaire
 export const initializeProfile = async (age: number, level: FrontendLiteracyLevel) => {
   const backendLevel = mapLevelToBackend(level);
-  const response = await fetch(`${API_BASE_URL}/questionnaire?age=${age}&level=${backendLevel}`, {
+  const response = await fetch(`${API_BASE_URL}/questionnaire`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
+    body: JSON.stringify({
+      age: age,
+      level: backendLevel,
+    }),
   });
 
   if (!response.ok) {
@@ -168,15 +173,17 @@ export const getProfile = async () => {
 // Convert backend event to frontend scenario
 export const convertEventToScenario = (event: BackendFinancialEvent): Scenario => {
   // Extract financial concept from event content or use a default
-  // The backend doesn't explicitly provide this, so we'll infer it or use a default
-  const financialConcept = 'Financial Decision'; // You might want to extract this from event_content
+  const financialConcept = 'Financial Decision';
+  
+  // Use hint if available, otherwise use event_content as question
+  const question = event.hint || event.event_content;
   
   return {
     scenario: event.event_content,
-    question: event.event_content, // Backend combines scenario and question in event_content
+    question: question,
     options: event.options.map(opt => ({
       text: opt.content,
-      outcome: opt.consequence.description,
+      outcome: opt.consequence.description || `You chose: ${opt.content}`,
     })),
     financialConcept,
   };
