@@ -8,6 +8,7 @@ import GameScreen from './components/GameScreen';
 import EndScreen from './components/EndScreen';
 import LoadingSpinner from './components/LoadingSpinner';
 import NavigationBar from './components/NavigationBar';
+import PreSummaryScreen from './components/PreSummaryScreen';
 import { GameState, PlayerStats, Scenario, ConceptToReview, GameGrade, AnswerQuality, LiteracyLevel } from './types';
 import { 
   initializeProfile, 
@@ -170,6 +171,8 @@ const App: React.FC = () => {
       const newNetWorth = updatedLifeState.balance;
 
       if (newAge >= 68) {
+        setGameState('preSummary');
+        
         try {
           const backendSummary = await fetchGameSummary();
           const summary = convertSummaryToFrontend(backendSummary);
@@ -178,9 +181,11 @@ const App: React.FC = () => {
           const finalBad = badAnswers + (analysis.quality === 'bad' ? 1 : 0);
           const finalTotal = totalQuestions + 1;
           const grade = calculateGrade(finalGood, finalNeutral, finalBad, finalTotal);
-          setGameGrade(grade);
-          setGameSummary(summary);
-          setGameState('end');
+          setTimeout(() => {
+            setGameGrade(grade);
+            setGameSummary(summary);
+            setGameState('end');
+          }, 3000);
         } catch (e) {
           const errorMessage = e instanceof Error ? e.message : 'Failed to generate your game summary. Please try again.';
           setError(errorMessage);
@@ -279,6 +284,8 @@ const App: React.FC = () => {
             </TouchableOpacity>
           </View>
         );
+      case 'preSummary':
+        return <PreSummaryScreen />;
       default:
         return <InitialQuiz onSubmit={handleQuizSubmit} />;
     }

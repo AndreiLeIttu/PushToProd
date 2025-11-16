@@ -248,7 +248,7 @@ const getConceptIcon = (conceptId: string) => {
       return <ChartIcon {...iconProps} />;
     case 'credit':
       return <CreditCardIcon {...iconProps} />;
-    case 'loans&debt':
+    case 'loans-&-debt':
       return <WalletIcon {...iconProps} />;
     case 'insurance':
       return <ShieldIcon {...iconProps} />;

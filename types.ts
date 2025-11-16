@@ -1,5 +1,5 @@
 
-export type GameState = 'quiz' | 'start' | 'concepts' | 'playing' | 'loading' | 'end' | 'error';
+export type GameState = 'quiz' | 'start' | 'concepts' | 'playing' | 'loading' | 'preSummary' | 'end' | 'error';
 export type LiteracyLevel = 'beginner' | 'medium' | 'advanced';
 
 export interface PlayerStats {
