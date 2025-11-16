@@ -1,18 +1,33 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Finly: AI-Powered Financial Life Simulator
 
-# Finly: A Life Simulation Game
-
-A React Native mobile app that teaches financial literacy through an interactive life simulation game.
+Finly is a gamified, AI-driven financial literacy app that guides players through life-like scenarios, helping them learn budgeting, saving, investing, credit, debt, and more — all through fun, interactive decision-making.
 
 ## Features
 
-- 🎮 Interactive life simulation from age 18 to 68
-- 💰 Learn financial concepts: Budgeting, Saving, Investing, Credit, and Debt
-- 📱 Cross-platform mobile app (iOS and Android)
-- 🎯 Make financial decisions and see their impact
-- 📊 Get personalized feedback and concept reviews
+- 🎮 **Interactive life simulation** (ages 13–68) with dynamic, AI-generated scenarios  
+- 💡 **Learn financial concepts**: Budgeting, Saving, Investing, Credit, Debt & more  
+- 🤖 **Personalized learning** based on age, knowledge & financial behavior  
+- 📈 **AI-powered feedback** after every decision  
+- 📊 **End-of-game summary** with weak points & personalized grade  
+- 📱 **Cross-platform** (Web, iOS, Android via Expo)
+
+## 🌐 Live Demo
+
+🔗 **Play the game here:** https://finly-ai.vercel.app/
+
+## 🧠 How Finly Works
+
+Finly adapts to each player using:
+- **FSK financial knowledge scale**
+- **Behavior-based scoring categories**
+- **Custom scenario generation using AI**
+- **Adaptive hints & tailored explanations**
+
+Every decision shapes your financial journey, affects your balance, knowledge, and traits, and leads to a unique end-game report.
+
+---
+
+# ⚙️ Installation & Setup
 
 ## Prerequisites
 
@@ -22,7 +37,7 @@ A React Native mobile app that teaches financial literacy through an interactive
 - For iOS: Xcode (Mac only)
 - For Android: Android Studio
 
-## Installation
+## Quick Start
 
 1. **Install dependencies:**
    ```bash
@@ -37,16 +52,6 @@ A React Native mobile app that teaches financial literacy through an interactive
    This will open the Expo DevTools in your browser.
 
 ## Running on Devices
-
-### iOS Simulator (Mac only)
-```bash
-npm run ios
-```
-
-### Android Emulator
-```bash
-npm run android
-```
 
 ### Physical Device
 
@@ -75,47 +80,11 @@ npm run web
 │   ├── LoadingSpinner.tsx
 │   └── icons/             # SVG icons
 ├── services/              # Game logic and API services
-│   └── geminiService.ts
+│   └── backendService.ts
 ├── types.ts              # TypeScript type definitions
 └── package.json
 
 ```
-
-## Backend Integration
-
-This app is now integrated with a FastAPI backend for generating questions and summaries.
-
-### Backend Setup
-
-1. Navigate to the backend directory:
-   ```bash
-   cd ../BackendPushToProd
-   ```
-
-2. Install Python dependencies:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-3. Set up environment variables:
-   Create a `.env` file with your OpenAI API key:
-   ```
-   OPENAI_API_KEY=your_api_key_here
-   ```
-
-4. Start the backend server:
-   ```bash
-   uvicorn main:app --reload
-   ```
-   
-   The backend will run on `http://localhost:8000` by default.
-
-### Frontend Configuration
-
-The frontend is configured to connect to the backend at `http://localhost:8000` by default. To change this:
-
-1. Update the `API_BASE_URL` in `PushToProd/services/backendService.ts`
-2. Or set the `REACT_APP_API_URL` environment variable (if using web build)
 
 ## Development
 
@@ -123,26 +92,7 @@ The app uses:
 - **React Native** with **Expo** for cross-platform development
 - **TypeScript** for type safety
 - **react-native-svg** for icons
-- **FastAPI Backend** for AI-powered question generation and summaries
-
-## Building for Production
-
-### iOS
-```bash
-expo build:ios
-```
-
-### Android
-```bash
-expo build:android
-```
-
-Or use EAS Build (recommended):
-```bash
-npm install -g eas-cli
-eas build --platform ios
-eas build --platform android
-```
+- **FastAPI Backend** for AI-powered question generation and summaries with **OpenAI SDK**
 
 ## API Endpoints
 
@@ -158,8 +108,3 @@ The backend provides the following endpoints:
 
 - The backend requires an OpenAI API key for question generation
 - Make sure the backend is running before starting the frontend
-- The app connects to `http://localhost:8000` by default (update in `backendService.ts` for production)
-
-## License
-
-Private project
