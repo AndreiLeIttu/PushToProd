@@ -242,35 +242,35 @@ const getConceptIcon = (conceptId: string) => {
   const iconProps = { width: 32, height: 32, color: "#06b6d4" };
   
   switch (conceptId) {
-    case 'saving':
+    case 'savings':
       return <PiggyBankIcon {...iconProps} />;
-    case 'investing':
+    case 'investing-basics':
       return <ChartIcon {...iconProps} />;
     case 'credit':
       return <CreditCardIcon {...iconProps} />;
-    case 'debt':
+    case 'loans&debt':
       return <WalletIcon {...iconProps} />;
     case 'insurance':
       return <ShieldIcon {...iconProps} />;
-    case 'taxes':
+    case 'income,-paychecks-&-taxes':
       return <DocumentIcon {...iconProps} />;
-    case 'charity':
+    case 'sharing/charity':
       return <HeartIcon {...iconProps} />;
     case 'opportunity-cost':
       return <ScaleIcon {...iconProps} />;
     case 'scarcity':
       return <ChartIcon {...iconProps} />;
-    case 'budgeting':
+    case 'simple-budgeting':
       return <WalletIcon {...iconProps} />;
-    case 'banks-account':
+    case 'banks-&-account':
       return <BankIcon {...iconProps} />;
     case 'interest':
       return <PercentIcon {...iconProps} />;
-    case 'short-long-term':
+    case 'short-term-vs-long-term':
       return <CalendarIcon {...iconProps} />;
-    case 'stocks-bonds-funds':
+    case 'stocks,-bonds-&-mutual-funds':
       return <TrophyIcon {...iconProps} />;
-    case 'risks-diversification':
+    case 'risks-&-diversification':
       return <ChartIcon {...iconProps} />;
     default:
       return <BookOpenIcon {...iconProps} />;
@@ -451,7 +451,7 @@ const ConceptsLibrary: React.FC<ConceptsLibraryProps> = ({ onBack, selectedConce
                       {showQuizResult && (
                         <View style={styles.quizExplanationContainer}>
                           <Text style={styles.quizExplanationTitle}>
-                            {selectedQuizAnswer === selectedConcept.correctAnswerIndex ? '🎉 Correct!' : '💭 Not quite'}
+                            {selectedQuizAnswer === selectedConcept.correctAnswerIndex ? '✓ Correct!' : '✕ Not quite'}
                           </Text>
                           <Text style={styles.quizExplanationText}>
                             {selectedConcept.quizExplanation}
