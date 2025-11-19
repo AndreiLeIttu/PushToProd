@@ -1,3 +1,5 @@
+<img width="256" height="256" alt="Finly logo" src="https://github.com/user-attachments/assets/b62b61ff-eada-439a-9c85-c5e5cc7ae694" />
+
 # Finly: AI-Powered Financial Life Simulator
 
 Finly is a gamified, AI-driven financial literacy app that guides players through life-like scenarios, helping them learn budgeting, saving, investing, credit, debt, and more — all through fun, interactive decision-making.
